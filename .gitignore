@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.mcp.json
+# Never commit a real MCP token.
+mcp.json
