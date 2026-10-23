@@ -69,6 +69,16 @@ def load(path):
                     item[key] = 0
             item["ref_note"] = (row.get("ref_note") or "").strip()
             items.append(item)
+
+    # 价格与图片来自菜单快照（data/menu.json），缺失时不影响配餐本身
+    menu_path = os.path.join(os.path.dirname(os.path.abspath(path)), "menu.json")
+    if os.path.exists(menu_path):
+        with open(menu_path, encoding="utf-8-sig") as fh:
+            menu = json.load(fh).get("items") or {}
+        for item in items:
+            info = menu.get(item["name"])
+            item["price"] = (info or {}).get("price")
+            item["available"] = item["name"] in menu
     return items
 
 
@@ -188,12 +198,14 @@ def render(plans, budget, goal, weights):
             "{}({} kcal)".format(i["name"], i["energy_kcal"]) for i in plan["items"]
         )
         print("{}. {}".format(rank, mix))
+        prices = [i.get("price") for i in plan["items"] if i.get("price") is not None]
+        cost = " | 合计 ¥{:.1f}".format(sum(prices)) if len(prices) == len(plan["items"]) else ""
         print(
             "   合计 {kcal} kcal | 蛋白 {p} g | 脂肪 {f} g | 碳水 {c} g | 钠 {na} mg | 钙 {ca} mg"
-            " | 剩余预算 {left} kcal | 得分 {s:.1f}".format(
+            " | 剩余预算 {left} kcal{cost} | 得分 {s:.1f}".format(
                 kcal=agg["energy_kcal"], p=agg["protein_g"], f=agg["fat_g"],
                 c=agg["carbohydrate_g"], na=agg["sodium_mg"], ca=agg["calcium_mg"],
-                left=plan["leftover"], s=plan["score"],
+                left=plan["leftover"], cost=cost, s=plan["score"],
             )
         )
         print("   结构: " + "、".join(CATEGORY_LABEL[i["category"]] for i in plan["items"]))
@@ -214,6 +226,8 @@ def main():
     ap.add_argument("--min-protein", type=int, default=0, help="最低蛋白质（g）")
     ap.add_argument("--max-sodium", type=int, default=None, help="最高钠（mg）")
     ap.add_argument("--avoid", default="", help="避开含这些关键词的餐品，逗号分隔")
+    ap.add_argument("--max-price", type=float, default=None, help="价格上限（元），需要 data/menu.json")
+    ap.add_argument("--in-stock", action="store_true", help="只用在售餐品（菜单快照里有的）")
     ap.add_argument("--top", type=int, default=5, help="返回几个方案，默认 5")
     ap.add_argument("--csv", default=default_csv, help="营养数据路径")
     ap.add_argument("--json", action="store_true", help="输出 JSON")
@@ -224,6 +238,9 @@ def main():
 
     avoid = [k.strip() for k in args.avoid.split(",") if k.strip()]
     items = [i for i in items if not any(k in i["name"] for k in avoid)]
+
+    if args.in_stock:
+        items = [i for i in items if i.get("available")]
 
     excluded = {k.strip() for k in args.exclude.split(",") if k.strip()}
     order = [c for c in ("main", "side", "drink", "dessert") if c not in excluded]
@@ -240,6 +257,16 @@ def main():
         pools, order, args.budget, weights, args.fill,
         args.max_items, args.min_protein, args.max_sodium, args.top * 10,
     )
+    # --max-price 限制的是套餐总价，不是单品单价
+    if args.max_price is not None:
+        priced = []
+        for plan in plans:
+            prices = [i.get("price") for i in plan["items"] if i.get("price") is not None]
+            if len(prices) == len(plan["items"]) and sum(prices) <= args.max_price:
+                priced.append(plan)
+        if priced:
+            plans = priced
+
     plans = diversify(dedupe(plans), args.top)
 
     if args.json:

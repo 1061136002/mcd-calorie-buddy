@@ -1,0 +1,845 @@
+{
+  "stores": [
+    "1420762",
+    "1420412",
+    "1950978",
+    "1950353",
+    "1401010",
+    "1400014",
+    "3450177",
+    "3450235",
+    "1960222",
+    "1960251"
+  ],
+  "note": "价格单位为元，取各门店中位数；不同城市/门店定价不同，仅供参考",
+  "items": {
+    "猪柳麦满分": {
+      "code": "5024",
+      "menu_name": "猪柳麦满分",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_5024_320.png",
+      "price": 14.0
+    },
+    "猪柳蛋麦满分": {
+      "code": "5022",
+      "menu_name": "猪柳蛋麦满分",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250709/product/MS_5022_320.png",
+      "price": 18.0
+    },
+    "烟肉蛋麦满分": {
+      "code": "5022",
+      "menu_name": "猪柳蛋麦满分",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250709/product/MS_5022_320.png",
+      "price": 18.0
+    },
+    "火腿扒麦满分": {
+      "code": "1254",
+      "menu_name": "火腿扒麦满分",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1254_320.png",
+      "price": 11.0
+    },
+    "中薯条": {
+      "code": "4810",
+      "menu_name": "薯条",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png",
+      "price": 14.0
+    },
+    "大薯条": {
+      "code": "4810",
+      "menu_name": "薯条",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png",
+      "price": 14.0
+    },
+    "小薯条": {
+      "code": "4810",
+      "menu_name": "薯条",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png",
+      "price": 14.0
+    },
+    "迷你薯条": {
+      "code": "4810",
+      "menu_name": "薯条",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png",
+      "price": 14.0
+    },
+    "圆筒冰淇淋": {
+      "code": "515837",
+      "menu_name": "圆筒冰淇淋",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515837_320.png",
+      "price": 5.0
+    },
+    "麦乐鸡5块": {
+      "code": "1401",
+      "menu_name": "麦乐鸡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260529/product/MS_G1401_320.png",
+      "price": 14.5
+    },
+    "大杯玉米杯": {
+      "code": "4437",
+      "menu_name": "玉米杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G4437_320.png",
+      "price": 13.0
+    },
+    "小杯玉米杯": {
+      "code": "4437",
+      "menu_name": "玉米杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G4437_320.png",
+      "price": 13.0
+    },
+    "麦辣鸡翅-2块": {
+      "code": "1700",
+      "menu_name": "麦辣鸡翅",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260325/product/MS_G1700_320.png",
+      "price": 15.0
+    },
+    "朱古力新地": {
+      "code": "9900008745",
+      "menu_name": "新地",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008745_320.gif",
+      "price": 12.0
+    },
+    "草莓新地": {
+      "code": "9900008745",
+      "menu_name": "新地",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008745_320.gif",
+      "price": 12.0
+    },
+    "奥利奥麦旋风": {
+      "code": "9900008754",
+      "menu_name": "经典麦旋风",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008754_320.gif",
+      "price": 15.5
+    },
+    "草莓麦旋风": {
+      "code": "521950",
+      "menu_name": "蓝莓爆爆珠麦旋风",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G521950_320.gif",
+      "price": 16.5
+    },
+    "香芋派": {
+      "code": "9900008752",
+      "menu_name": "派",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008752_320.gif",
+      "price": 8.5
+    },
+    "菠萝派": {
+      "code": "9900008752",
+      "menu_name": "派",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008752_320.gif",
+      "price": 8.5
+    },
+    "大脆鸡扒麦满分": {
+      "code": "5889",
+      "menu_name": "大脆鸡扒麦满分",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_5889_320.png",
+      "price": 11.0
+    },
+    "原味板烧鸡腿麦满分": {
+      "code": "6800",
+      "menu_name": "原味板烧鸡腿麦满分",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_6800_320.png",
+      "price": 15.0
+    },
+    "双层原味板烧鸡腿麦满分": {
+      "code": "4989",
+      "menu_name": "双层原味板烧鸡腿麦满分",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_4989_320.png",
+      "price": 19.0
+    },
+    "吉士汉堡包": {
+      "code": "9900005449",
+      "menu_name": "吉士汉堡包套餐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260824/product/MS_G504971_320.png",
+      "price": 26.0
+    },
+    "双层吉士汉堡": {
+      "code": "1120",
+      "menu_name": "双层吉士汉堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_1120_320.png",
+      "price": 23.0
+    },
+    "麦香鸡": {
+      "code": "1450",
+      "menu_name": "麦香鸡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1450_320.png",
+      "price": 17.0
+    },
+    "麦香鱼": {
+      "code": "1600",
+      "menu_name": "麦香鱼",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260101/product/MS_1600_320.png",
+      "price": 22.5
+    },
+    "麦辣鸡腿汉堡": {
+      "code": "1440",
+      "menu_name": "麦辣鸡腿汉堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260325/product/MS_1440_320.png",
+      "price": 22.5
+    },
+    "板烧鸡腿堡": {
+      "code": "1406",
+      "menu_name": "板烧鸡腿堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20241008/product/MS_1406_320.png",
+      "price": 23.5
+    },
+    "巨无霸": {
+      "code": "1100",
+      "menu_name": "巨无霸",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_1100_320.png",
+      "price": 26.5
+    },
+    "培根蔬萃双层牛堡": {
+      "code": "1106",
+      "menu_name": "培根蔬萃双层牛堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_1106_320.png",
+      "price": 24.5
+    },
+    "可乐中杯": {
+      "code": "9900008751",
+      "menu_name": "可乐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif",
+      "price": 9.5
+    },
+    "可乐大杯": {
+      "code": "9900008751",
+      "menu_name": "可乐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif",
+      "price": 9.5
+    },
+    "可乐小杯": {
+      "code": "9900008751",
+      "menu_name": "可乐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif",
+      "price": 9.5
+    },
+    "雪碧中杯": {
+      "code": "3010",
+      "menu_name": "雪碧",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G3010_320.png",
+      "price": 9.5
+    },
+    "雪碧大杯": {
+      "code": "3010",
+      "menu_name": "雪碧",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G3010_320.png",
+      "price": 9.5
+    },
+    "雪碧小杯": {
+      "code": "3010",
+      "menu_name": "雪碧",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G3010_320.png",
+      "price": 9.5
+    },
+    "无糖可口可乐中杯": {
+      "code": "9900008751",
+      "menu_name": "可乐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif",
+      "price": 9.5
+    },
+    "无糖可口可乐大杯": {
+      "code": "9900008751",
+      "menu_name": "可乐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif",
+      "price": 9.5
+    },
+    "无糖可口可乐小杯": {
+      "code": "9900008751",
+      "menu_name": "可乐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif",
+      "price": 9.5
+    },
+    "大杯鲜萃咖啡": {
+      "code": "520689",
+      "menu_name": "鲜萃咖啡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_G520688_320.gif",
+      "price": 9.5
+    },
+    "小杯鲜萃咖啡": {
+      "code": "520689",
+      "menu_name": "鲜萃咖啡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_G520688_320.gif",
+      "price": 9.5
+    },
+    "锡兰红茶": {
+      "code": "3505",
+      "menu_name": "锡兰红茶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_3505_320.png",
+      "price": 11.5
+    },
+    "纯牛奶（盒装）": {
+      "code": "507394",
+      "menu_name": "牛奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png",
+      "price": 19.0
+    },
+    "那么大鸡排": {
+      "code": "521156",
+      "menu_name": "那么大鸡排（椒盐风味）",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260101/product/MS_521156_320.png",
+      "price": 14.0
+    },
+    "阳光柠檬红茶中杯": {
+      "code": "515280",
+      "menu_name": "阳光柠檬红茶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515280_320.png",
+      "price": 9.5
+    },
+    "阳光柠檬红茶大杯": {
+      "code": "515280",
+      "menu_name": "阳光柠檬红茶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515280_320.png",
+      "price": 9.5
+    },
+    "阳光柠檬红茶小杯": {
+      "code": "515280",
+      "menu_name": "阳光柠檬红茶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515280_320.png",
+      "price": 9.5
+    },
+    "脆薯饼": {
+      "code": "521741",
+      "menu_name": "脆薯饼",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_521741_320.png",
+      "price": 8.5
+    },
+    "脆香油条": {
+      "code": "2631",
+      "menu_name": "脆香油条",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_2631_320.png",
+      "price": 8.5
+    },
+    "100%苹果汁": {
+      "code": "6362",
+      "menu_name": "100% 苹果汁(盒装)",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250430/product/MS_6362_320_1745552987716.png",
+      "price": 11.5
+    },
+    "汉堡包": {
+      "code": "9900005449",
+      "menu_name": "吉士汉堡包套餐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260824/product/MS_G504971_320.png",
+      "price": 26.0
+    },
+    "麦乐鸡4块": {
+      "code": "1401",
+      "menu_name": "麦乐鸡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260529/product/MS_G1401_320.png",
+      "price": 14.5
+    },
+    "苹果片": {
+      "code": "6102",
+      "menu_name": "苹果片",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_6102_320.png",
+      "price": 7.0
+    },
+    "不素之霸双层牛堡": {
+      "code": "4648",
+      "menu_name": "不素之霸双层牛堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_4648_320.png",
+      "price": 26.5
+    },
+    "双层深海鳕鱼堡": {
+      "code": "9900003586",
+      "menu_name": "双层深海鳕鱼堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900003586_320.png",
+      "price": 24.0
+    },
+    "儿童鱼排堡": {
+      "code": "9900016058",
+      "menu_name": "鱼排堡开心乐园餐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900016058_320.png",
+      "price": 24.0
+    },
+    "培根安格斯厚牛堡": {
+      "code": "511781",
+      "menu_name": "培根安格斯厚牛堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_511781_320.png",
+      "price": 34.5
+    },
+    "芝士安格斯厚牛堡": {
+      "code": "511782",
+      "menu_name": "芝士安格斯厚牛堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_511782_320.png",
+      "price": 31.5
+    },
+    "猪柳炒双蛋堡": {
+      "code": "502773",
+      "menu_name": "猪柳炒双蛋堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_502773_320.png",
+      "price": 18.0
+    },
+    "芝士双层安格斯厚牛堡": {
+      "code": "511782",
+      "menu_name": "芝士安格斯厚牛堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_511782_320.png",
+      "price": 31.5
+    },
+    "培根双层安格斯厚牛堡": {
+      "code": "511781",
+      "menu_name": "培根安格斯厚牛堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_511781_320.png",
+      "price": 34.5
+    },
+    "火腿扒早安营养卷": {
+      "code": "513112",
+      "menu_name": "火腿扒早安营养卷",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_513112_320.png",
+      "price": 15.5
+    },
+    "德式图林根香肠": {
+      "code": "505235",
+      "menu_name": "德式图林根香肠",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_505235_320.png",
+      "price": 9.5
+    },
+    "图林根香肠早安营养卷": {
+      "code": "513113",
+      "menu_name": "图林根香肠早安营养卷",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_513113_320.png",
+      "price": 16.0
+    },
+    "【美汁源】“黄金橙橙”": {
+      "code": "2430",
+      "menu_name": "【美汁源】“黄金橙橙”",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20240904/product/MS_2430_320.png",
+      "price": 13.0
+    },
+    "优品豆浆大杯": {
+      "code": "1088",
+      "menu_name": "优品豆浆",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1088_320.png",
+      "price": 9.5
+    },
+    "优品豆浆小杯": {
+      "code": "1088",
+      "menu_name": "优品豆浆",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1088_320.png",
+      "price": 9.5
+    },
+    "热牛奶中杯": {
+      "code": "507394",
+      "menu_name": "牛奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png",
+      "price": 19.0
+    },
+    "热牛奶大杯": {
+      "code": "507394",
+      "menu_name": "牛奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png",
+      "price": 19.0
+    },
+    "热牛奶小杯": {
+      "code": "507394",
+      "menu_name": "牛奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png",
+      "price": 19.0
+    },
+    "冰牛奶中杯": {
+      "code": "510041",
+      "menu_name": "冰牛奶中杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_510041_320.png",
+      "price": 19.0
+    },
+    "冰牛奶大杯": {
+      "code": "510041",
+      "menu_name": "冰牛奶中杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_510041_320.png",
+      "price": 19.0
+    },
+    "冰牛奶小杯": {
+      "code": "510041",
+      "menu_name": "冰牛奶中杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_510041_320.png",
+      "price": 19.0
+    },
+    "冰奶铁中杯": {
+      "code": "507409",
+      "menu_name": "麦咖啡™奶铁",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507372_320.gif",
+      "price": 13.9
+    },
+    "冰奶铁大杯": {
+      "code": "507409",
+      "menu_name": "麦咖啡™奶铁",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507372_320.gif",
+      "price": 13.9
+    },
+    "冰奶铁小杯": {
+      "code": "507409",
+      "menu_name": "麦咖啡™奶铁",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507372_320.gif",
+      "price": 13.9
+    },
+    "热奶铁中杯": {
+      "code": "507328",
+      "menu_name": "麦咖啡™热奶铁中杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507328_320.png",
+      "price": 13.9
+    },
+    "热奶铁大杯": {
+      "code": "507328",
+      "menu_name": "麦咖啡™热奶铁中杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507328_320.png",
+      "price": 13.9
+    },
+    "热奶铁小杯": {
+      "code": "507328",
+      "menu_name": "麦咖啡™热奶铁中杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507328_320.png",
+      "price": 13.9
+    },
+    "冰燕麦奶铁中杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "冰燕麦奶铁大杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "冰燕麦奶铁小杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "热燕麦奶铁中杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "热燕麦奶铁大杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "热燕麦奶铁小杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "冰美式中杯": {
+      "code": "507411",
+      "menu_name": "麦咖啡™美式",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507374_320.gif",
+      "price": 11.9
+    },
+    "冰美式大杯": {
+      "code": "507411",
+      "menu_name": "麦咖啡™美式",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507374_320.gif",
+      "price": 11.9
+    },
+    "冰美式小杯": {
+      "code": "507411",
+      "menu_name": "麦咖啡™美式",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507374_320.gif",
+      "price": 11.9
+    },
+    "热美式中杯": {
+      "code": "507368",
+      "menu_name": "麦咖啡™热美式中杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507368_320.png",
+      "price": 11.9
+    },
+    "热美式大杯": {
+      "code": "507368",
+      "menu_name": "麦咖啡™热美式中杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507368_320.png",
+      "price": 11.9
+    },
+    "热美式小杯": {
+      "code": "507368",
+      "menu_name": "麦咖啡™热美式中杯",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507368_320.png",
+      "price": 11.9
+    },
+    "卡布奇诺中杯": {
+      "code": "507387",
+      "menu_name": "卡布奇诺",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_G507388_320.png",
+      "price": 21.0
+    },
+    "卡布奇诺大杯": {
+      "code": "507387",
+      "menu_name": "卡布奇诺",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_G507388_320.png",
+      "price": 21.0
+    },
+    "冰浓浓燕麦黑巧中杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 15.9
+    },
+    "冰浓浓燕麦黑巧大杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 15.9
+    },
+    "冰燕麦奶中杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "冰燕麦奶大杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "冰燕麦奶小杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "热燕麦奶中杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "热燕麦奶大杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "热燕麦奶小杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 21.0
+    },
+    "冰浓浓抹茶牛奶中杯": {
+      "code": "507394",
+      "menu_name": "牛奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png",
+      "price": 19.0
+    },
+    "冰浓浓抹茶牛奶大杯": {
+      "code": "507394",
+      "menu_name": "牛奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png",
+      "price": 19.0
+    },
+    "热浓浓抹茶牛奶中杯": {
+      "code": "507394",
+      "menu_name": "牛奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png",
+      "price": 19.0
+    },
+    "热浓浓抹茶牛奶大杯": {
+      "code": "507394",
+      "menu_name": "牛奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png",
+      "price": 19.0
+    },
+    "抹茶阿芙佳朵": {
+      "code": "514851",
+      "menu_name": "咖啡阿芙佳朵",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_514851_320.png",
+      "price": 15.0
+    },
+    "咖啡阿芙佳朵": {
+      "code": "514851",
+      "menu_name": "咖啡阿芙佳朵",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_514851_320.png",
+      "price": 15.0
+    },
+    "热浓浓燕麦黑巧中杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 15.9
+    },
+    "热浓浓燕麦黑巧大杯": {
+      "code": "510488",
+      "menu_name": "燕麦奶",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png",
+      "price": 15.9
+    },
+    "原味板烧鸡腿炒双蛋堡": {
+      "code": "514700",
+      "menu_name": "原味板烧鸡腿炒双蛋堡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_514700_320.png",
+      "price": 18.0
+    },
+    "双层猪柳蛋麦满分": {
+      "code": "520830",
+      "menu_name": "双层猪柳蛋麦满分",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_520830_320_1745825365408.png",
+      "price": 21.0
+    },
+    "双层火腿扒麦满分": {
+      "code": "1254",
+      "menu_name": "火腿扒麦满分",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1254_320.png",
+      "price": 11.0
+    },
+    "脆脆薯条": {
+      "code": "4810",
+      "menu_name": "薯条",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png",
+      "price": 14.0
+    },
+    "薄皮焦香V翅": {
+      "code": "520445",
+      "menu_name": "薄皮焦香V翅",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20241202/product/MS_520445_320.png",
+      "price": 16.0
+    },
+    "“苹板”支撑Pro": {
+      "code": "9900009242",
+      "menu_name": "“苹板”支撑Pro套餐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900009242_320.png",
+      "price": 39.5
+    },
+    "牛气满满": {
+      "code": "9900009245",
+      "menu_name": "牛气满满套餐",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900009245_320.png",
+      "price": 35.0
+    },
+    "迷你朱古力新地": {
+      "code": "9900008745",
+      "menu_name": "新地",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008745_320.gif",
+      "price": 12.0
+    },
+    "迷你草莓新地": {
+      "code": "9900008745",
+      "menu_name": "新地",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008745_320.gif",
+      "price": 12.0
+    },
+    "中杯怡泉+C": {
+      "code": "515520",
+      "menu_name": "怡泉+C",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515520_320.png",
+      "price": 11.5
+    },
+    "大杯怡泉+C": {
+      "code": "515520",
+      "menu_name": "怡泉+C",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515520_320.png",
+      "price": 11.5
+    },
+    "柠萌风味薄皮焦香V翅": {
+      "code": "520445",
+      "menu_name": "薄皮焦香V翅",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20241202/product/MS_520445_320.png",
+      "price": 16.0
+    },
+    "麦麦脆汁鸡-琵琶腿": {
+      "code": "9900005432",
+      "menu_name": "麦麦脆汁鸡1块",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png",
+      "price": 15.0
+    },
+    "麦麦脆汁鸡-带骨里脊": {
+      "code": "9900005432",
+      "menu_name": "麦麦脆汁鸡1块",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png",
+      "price": 15.0
+    },
+    "蜜汁BBQ风味薄皮脆汁鸡-带骨里脊": {
+      "code": "9900005432",
+      "menu_name": "麦麦脆汁鸡1块",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png",
+      "price": 15.0
+    },
+    "蜜汁BBQ风味薄皮脆汁鸡-琵琶腿": {
+      "code": "9900005432",
+      "menu_name": "麦麦脆汁鸡1块",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png",
+      "price": 15.0
+    },
+    "蒜了吧黄油风味薄皮脆汁鸡-琵琶腿": {
+      "code": "9900005432",
+      "menu_name": "麦麦脆汁鸡1块",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png",
+      "price": 15.0
+    },
+    "蒜了吧黄油风味薄皮脆汁鸡-带骨里脊": {
+      "code": "9900005432",
+      "menu_name": "麦麦脆汁鸡1块",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png",
+      "price": 15.0
+    },
+    "纯悦": {
+      "code": "3757",
+      "menu_name": "纯悦",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20240904/product/MS_3757_320.png",
+      "price": 7.5
+    },
+    "浓浓黑巧雪冰中杯": {
+      "code": "515946",
+      "menu_name": "浓浓黑巧（冰/热）",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif",
+      "price": 13.9
+    },
+    "浓浓黑巧雪冰大杯": {
+      "code": "515946",
+      "menu_name": "浓浓黑巧（冰/热）",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif",
+      "price": 13.9
+    },
+    "冰浓浓黑巧中杯": {
+      "code": "515946",
+      "menu_name": "浓浓黑巧（冰/热）",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif",
+      "price": 13.9
+    },
+    "冰浓浓黑巧大杯": {
+      "code": "515946",
+      "menu_name": "浓浓黑巧（冰/热）",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif",
+      "price": 13.9
+    },
+    "热浓浓黑巧中杯": {
+      "code": "515946",
+      "menu_name": "浓浓黑巧（冰/热）",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif",
+      "price": 13.9
+    },
+    "热浓浓黑巧大杯": {
+      "code": "515946",
+      "menu_name": "浓浓黑巧（冰/热）",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif",
+      "price": 13.9
+    },
+    "浓缩咖啡": {
+      "code": "507389",
+      "menu_name": "浓缩咖啡",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_507389_320.png",
+      "price": 15.0
+    },
+    "浓浓抹茶雪冰中杯": {
+      "code": "515949",
+      "menu_name": "浓浓黑巧雪冰",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250611/product/MS_G515949_320.png",
+      "price": 23.0
+    },
+    "浓浓抹茶雪冰大杯": {
+      "code": "515949",
+      "menu_name": "浓浓黑巧雪冰",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/20250611/product/MS_G515949_320.png",
+      "price": 23.0
+    },
+    "酥酥多笋卷": {
+      "code": "521816",
+      "menu_name": "酥酥多笋卷",
+      "img": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_521816_320.png",
+      "price": 20.5
+    }
+  }
+}

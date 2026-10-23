@@ -43,9 +43,12 @@ $ python scripts/plan.py --budget 600 --goal balanced --top 3
 
 三个标签页：
 
-- **智能配餐** — 输入热量预算，选营养目标，实时给出带实物图的推荐组合
-- **套餐分析** — 自己搜餐品往里加，实时看热量/蛋白/钠合计和有没有超预算
-- **社区套餐** — 浏览别人分享的搭配，一键载入分析器自己改
+- **智能配餐** — 输入**热量预算**和**价格上限**，选营养目标，实时给出带实物图和价格的推荐组合
+  - 排序：推荐 / 价格低→高 / 价格高→低 / 蛋白质 / 热量
+  - 「换一批」翻页看更多方案（600 卡均衡档有 50+ 个方案）
+  - 「只用在售餐品」默认开启，过滤掉营养库里已下架的季节限定
+- **自己搭配** — 按分类浏览全部 158 个餐品，点一下加进套餐，实时看热量、价格、钠合计
+- **社区套餐** — 浏览别人分享的搭配（含价格），一键载入自己改
 
 纯静态页面，算法在浏览器里跑，数据打包在 `docs/data/` 里。
 **不连后端、不需要 Token、不收集任何信息**——这也是为什么它能直接挂在 GitHub Pages 上。
@@ -94,6 +97,12 @@ python scripts/plan.py --budget 500 --goal low_sodium --max-sodium 1000
 
 # 生酮/低碳
 python scripts/plan.py --budget 400 --goal low_carb
+
+# 控制花费：套餐总价不超过 45 元（需要 data/menu.json）
+python scripts/plan.py --budget 600 --max-price 45
+
+# 只保留当前门店还在卖的餐品
+python scripts/plan.py --budget 600 --in-stock
 
 # 不喝饮料（省下的预算全给吃的）
 python scripts/plan.py --budget 500 --exclude drink
