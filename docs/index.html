@@ -12,14 +12,16 @@
   --mcd-red: #da291c;
   --mcd-red-dark: #b71c14;
   --mcd-yellow: #ffc72c;
-  --ink: #292726;
-  --ink-2: #6b6862;
-  --ink-3: #a3a09a;
-  --bg: #f6f5f2;
-  --card: #ffffff;
-  --line: #e8e5df;
-  --shadow: 0 2px 10px rgba(41, 39, 38, .07);
-  --radius: 16px;
+  /* 暖色调：页面用米色底，卡片用暖白，避免纯白刺眼 */
+  --bg: #efe9dd;
+  --card: #fbf7ef;
+  --card-alt: #f5efe3;
+  --ink: #2b2620;
+  --ink-2: #6d6659;
+  --ink-3: #9c9484;
+  --line: #ddd3bf;
+  --shadow: 0 2px 10px rgba(60, 48, 30, .08);
+  --radius: 14px;
 }
 
 * { box-sizing: border-box; }
@@ -33,13 +35,13 @@ body {
 }
 
 a { color: var(--mcd-red); }
-.wrap { max-width: 940px; margin: 0 auto; padding: 0 20px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
 
 /* ---------- hero ---------- */
 .hero {
   background: var(--mcd-red);
   color: #fff;
-  padding: 26px 0 22px;
+  padding: 20px 0 18px;
 }
 .hero-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
 .logo-mark {
@@ -75,11 +77,21 @@ a { color: var(--mcd-red); }
   background: var(--card); border-radius: var(--radius);
   padding: 18px; margin: 14px 0; box-shadow: var(--shadow);
 }
+/* 宽屏时方案卡片双列，减少两侧留白 */
+.plans {
+  display: grid; grid-template-columns: 1fr; gap: 14px;
+}
+@media (min-width: 1000px) {
+  .plans { grid-template-columns: 1fr 1fr; }
+}
+
 .plan {
   background: var(--card); border-radius: var(--radius);
-  padding: 18px; margin: 14px 0; box-shadow: var(--shadow);
+  padding: 16px; margin: 0; box-shadow: var(--shadow);
   border-left: 5px solid var(--mcd-yellow);
 }
+
+.card { padding: 18px 20px; margin: 14px 0; }
 
 .row-between { display: flex; justify-content: space-between; align-items: center; }
 h2 { font-size: 16px; margin: 0 0 12px; font-weight: 700; }
@@ -96,24 +108,24 @@ h2 { font-size: 16px; margin: 0 0 12px; font-weight: 700; }
 input[type=number] {
   border: 1px solid var(--line); border-radius: 10px;
   padding: 8px 10px; font-size: 17px; font-weight: 700; width: 100%;
-  color: var(--ink); background: #fff;
+  color: var(--ink); background: #fffdf9;
 }
 .unit { font-size: 12px; color: var(--ink-3); }
 input[type=range] { width: 100%; accent-color: var(--mcd-red); margin-top: 2px; }
 input[type=text] {
   border: 1px solid var(--line); border-radius: 10px;
-  padding: 9px 12px; font-size: 15px; width: 100%; color: var(--ink);
+  padding: 9px 12px; font-size: 15px; width: 100%; color: var(--ink); background: #fffdf9;
 }
 select {
   border: 1px solid var(--line); border-radius: 10px;
-  padding: 9px 10px; font-size: 14px; background: #fff; color: var(--ink); width: 100%;
+  padding: 9px 10px; font-size: 14px; background: #fffdf9; color: var(--ink); width: 100%;
 }
 #fill-wrap { display: flex; align-items: center; gap: 8px; }
 #fill-wrap input[type=range] { width: 110px; }
 
 .chips { display: flex; gap: 8px; flex-wrap: wrap; }
 .chip {
-  border: 1.5px solid var(--line); background: #fff; cursor: pointer;
+  border: 1.5px solid var(--line); background: var(--card); cursor: pointer;
   border-radius: 999px; padding: 6px 15px; font-size: 13px;
   color: var(--ink-2); font-weight: 600;
 }
@@ -136,7 +148,7 @@ select {
 .food { width: 96px; text-align: center; position: relative; }
 .food .thumb {
   width: 84px; height: 84px; border-radius: 14px; margin: 0 auto;
-  background: #f2efe9; overflow: hidden; display: grid; place-items: center;
+  background: #ece4d4; overflow: hidden; display: grid; place-items: center;
 }
 .food img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .food .ph { font-size: 26px; font-weight: 700; color: var(--ink-3); }
@@ -151,7 +163,7 @@ select {
 
 .metrics {
   display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
-  background: #faf9f7; border-radius: 12px; padding: 10px 12px;
+  background: var(--card-alt); border-radius: 12px; padding: 10px 12px;
 }
 .metrics div { text-align: center; }
 .metrics .m-val { font-size: 15px; font-weight: 700; }
@@ -170,14 +182,14 @@ select {
   gap: 10px; max-height: 320px; overflow-y: auto; margin-top: 12px;
 }
 .picker button {
-  border: 1.5px solid var(--line); background: #fff; border-radius: 12px;
+  border: 1.5px solid var(--line); background: var(--card); border-radius: 12px;
   padding: 8px; font-size: 12px; cursor: pointer; color: var(--ink);
   display: flex; flex-direction: column; align-items: center; gap: 4px;
 }
 .picker button:hover { border-color: var(--mcd-red); }
 .picker button img { width: 54px; height: 54px; object-fit: cover; border-radius: 10px; }
 .picker button .dot {
-  width: 54px; height: 54px; border-radius: 10px; background: #f2efe9;
+  width: 54px; height: 54px; border-radius: 10px; background: #ece4d4;
   display: grid; place-items: center; font-weight: 700; color: var(--ink-3);
 }
 .picker .pk { font-size: 11px; color: var(--mcd-red); font-weight: 700; }
@@ -189,14 +201,14 @@ select {
 .totals.on { display: block; }
 
 .ghost {
-  border: 1.5px solid var(--line); background: #fff; border-radius: 999px;
+  border: 1.5px solid var(--line); background: var(--card); border-radius: 999px;
   padding: 5px 14px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink-2);
 }
 .ghost:hover { border-color: var(--mcd-red); color: var(--mcd-red); }
 
 /* ---------- footer ---------- */
 .site-footer {
-  background: #292726; color: #b8b5ae;
+  background: #2b2620; color: #b6ae9e;
   padding: 24px 0 44px; font-size: 12px;
 }
 .site-footer p { margin: 5px 0; }
