@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "description": "社区共享套餐库。nutrition 字段由 scripts/combo.py recalc 依据 data/nutrition.csv 自动计算，请勿手改。",
+  "combos": [
+    {
+      "id": "hp-500-8f3a",
+      "name": "500 卡增肌餐",
+      "author": "1061136002",
+      "created_at": "2026-10-23",
+      "goal": "high_protein",
+      "tags": [
+        "增肌",
+        "高蛋白"
+      ],
+      "budget": 500,
+      "items": [
+        "蜜汁快乐",
+        "蜜汁BBQ风味薄皮脆汁鸡-带骨里脊",
+        "冰奶铁小杯"
+      ],
+      "note": "蛋白质 47g，热量利用率极高。钠 1400mg 偏高，控钠人群换成下面的控钠餐。",
+      "nutrition": {
+        "energy_kcal": 496,
+        "protein_g": 47,
+        "fat_g": 18,
+        "carbohydrate_g": 34,
+        "sodium_mg": 1400,
+        "calcium_mg": 206
+      }
+    },
+    {
+      "id": "bl-600-2c19",
+      "name": "600 卡均衡正餐",
+      "author": "1061136002",
+      "created_at": "2026-10-23",
+      "goal": "balanced",
+      "tags": [
+        "午餐",
+        "均衡"
+      ],
+      "budget": 600,
+      "items": [
+        "蜜汁快乐",
+        "蜜汁BBQ风味薄皮脆汁鸡-带骨里脊",
+        "热奶铁中杯"
+      ],
+      "note": "53g 蛋白 + 382mg 钙，作为一天的主餐比较扎实。",
+      "nutrition": {
+        "energy_kcal": 596,
+        "protein_g": 53,
+        "fat_g": 22,
+        "carbohydrate_g": 43,
+        "sodium_mg": 1455,
+        "calcium_mg": 382
+      }
+    },
+    {
+      "id": "ls-600-d470",
+      "name": "600 卡控钠餐",
+      "author": "1061136002",
+      "created_at": "2026-10-23",
+      "goal": "low_sodium",
+      "tags": [
+        "控钠",
+        "高血压友好"
+      ],
+      "budget": 600,
+      "items": [
+        "小薯条",
+        "热奶铁大杯"
+      ],
+      "note": "全库钠最低的组合之一，仅 254mg。代价是蛋白质偏低，不建议长期单独吃。",
+      "nutrition": {
+        "energy_kcal": 459,
+        "protein_g": 17,
+        "fat_g": 20,
+        "carbohydrate_g": 50,
+        "sodium_mg": 254,
+        "calcium_mg": 444
+      }
+    },
+    {
+      "id": "lc-400-5ae1",
+      "name": "400 卡低碳餐",
+      "author": "1061136002",
+      "created_at": "2026-10-23",
+      "goal": "low_carb",
+      "tags": [
+        "低碳",
+        "减脂"
+      ],
+      "budget": 400,
+      "items": [
+        "烟肉蛋麦满分",
+        "蒜了吧黄油风味薄皮脆汁鸡-带骨里脊",
+        "大杯鲜萃咖啡"
+      ],
+      "note": "碳水仅 28g，早餐时段可点。咖啡不加糖不加奶。",
+      "nutrition": {
+        "energy_kcal": 399,
+        "protein_g": 36,
+        "fat_g": 12,
+        "carbohydrate_g": 28,
+        "sodium_mg": 1236,
+        "calcium_mg": 305
+      }
+    },
+    {
+      "id": "ca-700-91bd",
+      "name": "700 卡补钙餐",
+      "author": "1061136002",
+      "created_at": "2026-10-23",
+      "goal": "high_calcium",
+      "tags": [
+        "补钙",
+        "高蛋白"
+      ],
+      "budget": 700,
+      "items": [
+        "蜜汁快乐",
+        "蜜汁BBQ风味薄皮脆汁鸡-带骨里脊",
+        "冰牛奶大杯"
+      ],
+      "note": "钙 549mg，约占成人每日推荐量一半以上，同时有 57g 蛋白。",
+      "nutrition": {
+        "energy_kcal": 679,
+        "protein_g": 57,
+        "fat_g": 27,
+        "carbohydrate_g": 49,
+        "sodium_mg": 1510,
+        "calcium_mg": 549
+      }
+    },
+    {
+      "id": "lt-350-3f7c",
+      "name": "350 卡轻食",
+      "author": "1061136002",
+      "created_at": "2026-10-23",
+      "goal": "balanced",
+      "tags": [
+        "轻食",
+        "加餐"
+      ],
+      "budget": 350,
+      "items": [
+        "蜜汁BBQ风味薄皮脆汁鸡-带骨里脊",
+        "热奶铁中杯"
+      ],
+      "note": "两件套，31g 蛋白，适合当下午加餐或预算紧张时救急。",
+      "nutrition": {
+        "energy_kcal": 338,
+        "protein_g": 31,
+        "fat_g": 13,
+        "carbohydrate_g": 23,
+        "sodium_mg": 734,
+        "calcium_mg": 348
+      }
+    },
+    {
+      "id": "br-450-6d28",
+      "name": "450 卡经典早餐",
+      "author": "1061136002",
+      "created_at": "2026-10-23",
+      "goal": "balanced",
+      "tags": [
+        "早餐",
+        "经典"
+      ],
+      "budget": 450,
+      "items": [
+        "猪柳蛋麦满分",
+        "小杯玉米杯",
+        "冰美式大杯"
+      ],
+      "note": "最常规的麦当劳早餐组合，钠 847mg 在同类里算克制。",
+      "nutrition": {
+        "energy_kcal": 454,
+        "protein_g": 26,
+        "fat_g": 22,
+        "carbohydrate_g": 34,
+        "sodium_mg": 847,
+        "calcium_mg": 257
+      }
+    },
+    {
+      "id": "vg-530-a0e4",
+      "name": "530 卡蔬食餐",
+      "author": "1061136002",
+      "created_at": "2026-10-23",
+      "goal": "balanced",
+      "tags": [
+        "蔬食",
+        "低钠"
+      ],
+      "budget": 530,
+      "items": [
+        "鲜蔬蛋沙拉叠叠卷",
+        "大杯玉米杯",
+        "热牛奶中杯"
+      ],
+      "note": "无肉组合，钠仅 621mg、钙 391mg，是库里最均衡的素食选择。",
+      "nutrition": {
+        "energy_kcal": 529,
+        "protein_g": 25,
+        "fat_g": 23,
+        "carbohydrate_g": 51,
+        "sodium_mg": 621,
+        "calcium_mg": 391
+      }
+    }
+  ]
+}

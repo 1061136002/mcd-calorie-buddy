@@ -56,9 +56,38 @@ python scripts/plan.py --budget 500 --json                        # 程序化消
 - **结构**：只有小食+饮料、没有主食的"方案"，说明预算太紧或已被 `--exclude` 过滤，要说明清楚。
 - **多样性**：`--top` 返回的是去重后的不同思路，逐个简要说明各自适合什么场景。
 
-### 5. 想下单才走这一步
+### 5. 社区套餐库（先查，别每次都重算）
 
-用户确认某个组合后：
+用户没指定预算、或想看看别人怎么吃时，先翻社区库：
+
+```bash
+python scripts/combo.py list --max-budget 600 --sort protein
+python scripts/combo.py list --goal low_sodium --tag 早餐
+python scripts/combo.py show <id>
+```
+
+用户对自己的搭配满意，帮他存下来并生成分享素材：
+
+```bash
+python scripts/combo.py save --name "600 卡增肌晚餐" --items "板烧鸡腿堡,麦乐鸡5块,无糖可口可乐中杯" --goal high_protein --tags "增肌" --author "<用户ID>"
+python scripts/combo.py share <id>      # 生成一行 MC1| 分享码
+```
+
+`--items` 的名字必须能在 `data/nutrition.csv` 里找到，否则会警告并按 0 计入——
+保存前先核对。
+
+### 6. 想下单才走这一步
+
+用 `scripts/order.py`，它把整条链路串好了：
+
+```bash
+python scripts/order.py <combo_id> --city 深圳 --keyword 科技园          # 试算
+python scripts/order.py <combo_id> --city 深圳 --keyword 科技园 --confirm  # 真下单
+```
+
+只有用户明确说「下单」「确认购买」之类才加 `--confirm`。**默认永远是试算。**
+
+它的内部流程（需要门店时也可以手动走）：
 
 1. `query-nearby-stores`（到店自取 beType=1 / 得来速 beType=5）或 `delivery-query-addresses` + `delivery-query-stores`（外送 beType=2）拿 `storeCode`
 2. `query-meals` 查菜单，把配餐结果里的餐品名映射成 `productCode`
@@ -70,7 +99,10 @@ python scripts/plan.py --budget 500 --json                        # 程序化消
 ## 常见坑
 
 - 营养数据里 `energyKj` 是千焦、`energyKcal` 才是大卡，别混用。
-- 餐品名与菜单 `query-meals` 返回名可能不完全一致，用关键词匹配后要人工核对再下单。
+- 餐品名与菜单 `query-meals` 返回名**经常不一致**：营养数据里是「小薯条」「可乐中杯」，
+  菜单里是「薯条」「可乐」。`order.py` 已做剥离规格 + 模糊匹配，但**匹配不上的会列出来**，
+  必须如实告诉用户，不能替他猜一个看着像的。
+- 社区套餐里的餐品可能已下架或该门店不售，`order.py` 会打印未匹配清单，照实转述。
 - `list-nutrition-foods` 返回的是文本表格而非 JSON，用 `scripts/fetch_nutrition.py` 解析，别手写正则。
 - Token 只从环境变量读，绝不写进任何文件、日志或对话输出。
 

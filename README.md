@@ -8,6 +8,12 @@ Built for [麦当劳程序员创意开发大赛](https://github.com/M-China/mcd-
 
 ---
 
+## 三件事
+
+1. **配餐** — 给热量预算，算出最优组合（`plan.py`）
+2. **社区** — 保存、浏览、分享别人的套餐（`combo.py`）
+3. **下单** — 把任意社区套餐一键下到门店（`order.py`）
+
 ## 它解决什么问题
 
 麦当劳官网和各路 App 只告诉你「某个汉堡 513 大卡」，但没人回答真正的问题：
@@ -31,7 +37,7 @@ $ python scripts/plan.py --budget 600 --goal balanced --top 3
 只需要 Python 3.8+，**零第三方依赖**。
 
 ```bash
-git clone https://github.com/1061136002/mcd-calorie-buddy.git
+git clone https://github.com/<your-name>/mcd-calorie-buddy.git
 cd mcd-calorie-buddy
 ```
 
@@ -88,6 +94,60 @@ python scripts/plan.py --budget 500 --json
 | `--top` | `5` | 返回几个方案 |
 | `--json` | 关 | 输出 JSON |
 
+## 社区套餐库
+
+一个人算得再准，也不如一千个人各贡献一个搭配。社区库在
+[`community/combos.json`](community/combos.json)，已有 8 个真实套餐。
+
+```bash
+# 浏览：600 卡以内，按蛋白质排序
+python scripts/combo.py list --max-budget 600 --sort protein
+
+# 按目标/标签/作者筛选
+python scripts/combo.py list --goal low_sodium
+python scripts/combo.py list --tag 早餐
+
+# 看详情
+python scripts/combo.py show ls-600-d470
+
+# 保存自己的
+python scripts/combo.py save --name "600 卡增肌晚餐" \
+  --items "板烧鸡腿堡,麦乐鸡5块,无糖可口可乐中杯" \
+  --goal high_protein --tags "增肌,晚餐" --author "你的ID"
+
+# 分享：生成一行分享码发给朋友
+python scripts/combo.py share <套餐id>
+python scripts/combo.py import "MC1|..."
+
+# 提 PR 让所有人都能看到
+python scripts/combo.py submit <套餐id>
+```
+
+**分享 = 提 PR**，没有后端、没有账号。合并后所有人 `list` 都能刷到你的搭配。
+完整流程见 [community/CONTRIBUTING.md](community/CONTRIBUTING.md)。
+
+## 一键下单
+
+看到别人的套餐想直接吃？一条命令从套餐走到订单：
+
+```bash
+export MCD_MCP_TOKEN='你的 token'
+
+# 试算（默认，不下单）
+python scripts/order.py ls-600-d470 --city 深圳 --keyword 科技园
+
+# 确认无误后加 --confirm 才真正下单
+python scripts/order.py ls-600-d470 --city 深圳 --keyword 科技园 --confirm
+```
+
+它会：查门店 → 拉菜单 → 把套餐里的餐品名匹配成 `productCode` → 算价 → （确认后）下单。
+
+⚠️ 两个设计上的克制：
+
+- **不加 `--confirm` 永远是试算**，不会创建订单
+- 匹配不上的餐品会**明确列出来**而不是猜一个。麦当劳菜单经常上下架，
+  社区套餐里的餐品可能你附近门店没有——宁可告诉你「匹配失败」，也不能给你点错的东西
+
 ## 它是怎么算的
 
 1. **分类**：按关键词把 160 个餐品分成主食/小食/饮料/甜品（甜品和小食优先匹配，避免「柠檬拉明顿」被当成饮料）。
@@ -112,19 +172,30 @@ python scripts/plan.py --budget 500 --json
 ├── CONTEST_DECLARATION.md      # 官方参赛声明（未改动）
 ├── mcp-config.example.json     # 脱敏配置，仅环境变量占位符
 ├── workbuddy.md                # WorkBuddy 开发上下文
+├── community/
+│   ├── combos.json             # 社区共享套餐库
+│   └── CONTRIBUTING.md         # 怎么分享自己的套餐
 ├── data/nutrition.csv          # 营养数据快照（160 条）
 ├── scripts/
 │   ├── mcp_client.py           # 极简 MCP Streamable HTTP 客户端
 │   ├── fetch_nutrition.py      # 从 MCP 拉数据 → CSV
-│   └── plan.py                 # 配餐规划器
-└── tests/test_plan.py
+│   ├── plan.py                 # 配餐规划器
+│   ├── combo.py                # 社区套餐库：保存/浏览/分享/导入
+│   └── order.py                # 社区套餐一键下单
+└── tests/
+    ├── test_plan.py
+    └── test_combo.py
 ```
 
 ## 跑测试
 
 ```bash
 python tests/test_plan.py
+python tests/test_combo.py
 ```
+
+12 项，覆盖餐品分类、预算约束、低钠目标有效性、社区库营养值一致性、
+餐品名到菜单编码的匹配（含杯型/规格剥离与模糊匹配）。
 
 ## 免责声明
 

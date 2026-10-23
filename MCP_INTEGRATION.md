@@ -71,18 +71,37 @@ scripts/fetch_nutrition.py
         ▼
    plan.py：分类 → 预算约束下搜索 → 加权打分 → 去重/多样性
         │
+        ├──► combo.py save ──► community/combos.json ──► 提 PR 分享给所有人
+        │
         ▼
    输出 Top N 方案（热量/蛋白/脂肪/碳水/钠/钙 + 剩余预算）
         │
-        ▼ （用户要下单）
+        ▼ （用户要下单，或看中了社区里别人的套餐）
   query-nearby-stores / delivery-query-stores
         │
         ▼
-  query-meals ──► 餐品名映射 productCode
+  query-meals ──► 餐品名映射 productCode（剥离规格 + 模糊匹配）
         │
         ▼
   query-store-coupons ──► calculate-price ──► 用户确认 ──► create-order
 ```
+
+`scripts/order.py` 把下半段完全程序化了：它直接调 `mcp_client.call_tool()`
+依次完成门店解析、菜单匹配、算价，最后一步 `create-order` 必须由
+`--confirm` 显式触发。它同时证明了这套 MCP 能被第三方脚本稳定驱动。
+
+### 餐品名映射是个真问题
+
+营养数据与门店菜单是两套命名：
+
+| 营养数据（`list-nutrition-foods`） | 菜单（`query-meals`） |
+|---|---|
+| 小薯条 / 中薯条 / 大薯条 | 薯条 |
+| 可乐中杯 / 可乐大杯 | 可乐 |
+| 冰奶铁小杯 / 热奶铁中杯 | 麦咖啡™奶铁 |
+
+`order.py` 用四级降级匹配：精确 → 剥离杯型规格后精确 → 双向子串 →
+最长公共子串。匹配不上的餐品会被单独列出而不是猜一个，避免下错单。
 
 ## 业务价值
 
@@ -93,3 +112,6 @@ scripts/fetch_nutrition.py
 3. **形成闭环**：从营养数据出发，最终能落到真实门店的真实订单上，
    把 MCP 的查询能力与交易能力串成一条完整链路。
 4. **场景高频且长期存在**：减脂、健身、控钠是长期需求，不是一次性玩具。
+5. **从"我算给你看"到"大家一起用"**：`combo.py` 让每个用户都能把自己的搭配沉淀下来，
+   `order.py` 让别人的搭配一键变成自己手里的一餐。MCP 提供的能力在这里被
+   复用成了社区协作的基础设施，而不只是一次性查询。
