@@ -67,7 +67,7 @@ cd docs && python -m http.server 8000
 只需要 Python 3.8+，**零第三方依赖**。
 
 ```bash
-git clone https://github.com/<your-name>/mcd-calorie-buddy.git
+git clone https://github.com/1061136002/mcd-calorie-buddy.git
 cd mcd-calorie-buddy
 ```
 
