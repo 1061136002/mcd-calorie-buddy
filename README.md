@@ -3,6 +3,11 @@
 > 给一句热量预算，用麦当劳中国的**真实营养数据**算出最划算的一餐。
 > 减脂期也能吃麦当劳，只要算得清。
 
+**不想装环境？直接用网页版** 👉 https://1061136002.github.io/mcd-calorie-buddy/
+
+输入大卡数，网页直接给出带图的推荐组合；还能自己勾选餐品分析营养、
+浏览社区里别人分享的套餐。数据全部内置在页面里，不连后端、不上传任何信息。
+
 Built for [麦当劳程序员创意开发大赛](https://github.com/M-China/mcd-developer-innovation-challenge)，基于
 [麦当劳 MCP Server](https://github.com/M-China/mcd-mcp-server) 开发。
 
@@ -32,12 +37,34 @@ $ python scripts/plan.py --budget 600 --goal balanced --top 3
    结构: 主食、小食、饮料
 ```
 
-## 安装
+## 网页版（不用装任何东西）
+
+<https://1061136002.github.io/mcd-calorie-buddy/>
+
+三个标签页：
+
+- **智能配餐** — 输入热量预算，选营养目标，实时给出带实物图的推荐组合
+- **套餐分析** — 自己搜餐品往里加，实时看热量/蛋白/钠合计和有没有超预算
+- **社区套餐** — 浏览别人分享的搭配，一键载入分析器自己改
+
+纯静态页面，算法在浏览器里跑，数据打包在 `docs/data/` 里。
+**不连后端、不需要 Token、不收集任何信息**——这也是为什么它能直接挂在 GitHub Pages 上。
+
+本地想跑：
+
+```bash
+cd docs && python -m http.server 8000
+# 打开 http://localhost:8000
+```
+
+数据更新后重新生成：`python scripts/build_web_data.py`
+
+## 安装（命令行版）
 
 只需要 Python 3.8+，**零第三方依赖**。
 
 ```bash
-git clone https://github.com/1061136002/mcd-calorie-buddy.git
+git clone https://github.com/<your-name>/mcd-calorie-buddy.git
 cd mcd-calorie-buddy
 ```
 
@@ -176,12 +203,19 @@ python scripts/order.py ls-600-d470 --city 深圳 --keyword 科技园 --confirm
 │   ├── combos.json             # 社区共享套餐库
 │   └── CONTRIBUTING.md         # 怎么分享自己的套餐
 ├── data/nutrition.csv          # 营养数据快照（160 条）
+├── docs/                       # 网页版（GitHub Pages 源目录）
+│   ├── index.html
+│   ├── app.js                  # 配餐算法的 JS 实现（与 plan.py 结果一致）
+│   ├── styles.css
+│   └── data/                   # 由 build_web_data.py 生成
 ├── scripts/
 │   ├── mcp_client.py           # 极简 MCP Streamable HTTP 客户端
 │   ├── fetch_nutrition.py      # 从 MCP 拉数据 → CSV
 │   ├── plan.py                 # 配餐规划器
 │   ├── combo.py                # 社区套餐库：保存/浏览/分享/导入
-│   └── order.py                # 社区套餐一键下单
+│   ├── order.py                # 社区套餐一键下单
+│   ├── build_images.py         # 从菜单接口拉餐品图 → data/images.json
+│   └── build_web_data.py       # 生成网页版数据
 └── tests/
     ├── test_plan.py
     └── test_combo.py
