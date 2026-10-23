@@ -5,7 +5,210 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>麦麦热量管家 · 麦当劳热量预算配餐</title>
 <meta name="description" content="输入热量预算和价格上限，用麦当劳真实营养与价格数据算出最划算的一餐。支持高蛋白、低钠、低碳、高钙，还能自己搭配分析、浏览社区分享。">
-<link rel="stylesheet" href="styles.css">
+<!-- 本文件由 scripts/build_web_data.py 生成，勿直接编辑。
+     改样式去 docs/styles.css，改逻辑去 docs/app.js，改结构去 scripts/web_template.html，然后重新 build。 -->
+<style>
+:root {
+  --mcd-red: #da291c;
+  --mcd-red-dark: #b71c14;
+  --mcd-yellow: #ffc72c;
+  --ink: #292726;
+  --ink-2: #6b6862;
+  --ink-3: #a3a09a;
+  --bg: #f6f5f2;
+  --card: #ffffff;
+  --line: #e8e5df;
+  --shadow: 0 2px 10px rgba(41, 39, 38, .07);
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.6 system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--mcd-red); }
+.wrap { max-width: 940px; margin: 0 auto; padding: 0 20px; }
+
+/* ---------- hero ---------- */
+.hero {
+  background: var(--mcd-red);
+  color: #fff;
+  padding: 26px 0 22px;
+}
+.hero-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+.logo-mark {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--mcd-yellow); color: var(--mcd-red);
+  display: grid; place-items: center; font-weight: 700; font-size: 22px;
+  margin-bottom: 8px;
+}
+.hero h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: .5px; }
+.hero-sub { margin: 4px 0 0; font-size: 14px; opacity: .92; }
+.star-btn {
+  background: var(--mcd-yellow); color: var(--mcd-red-dark);
+  text-decoration: none; font-weight: 600; font-size: 14px;
+  padding: 10px 18px; border-radius: 999px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .12);
+}
+.star-btn:hover { background: #ffd45c; }
+
+/* ---------- tabs ---------- */
+.tabs { display: flex; gap: 8px; margin: 20px auto 6px; }
+.tab {
+  border: 0; background: transparent; cursor: pointer;
+  padding: 9px 18px; border-radius: 999px;
+  font-size: 14px; font-weight: 600; color: var(--ink-2);
+}
+.tab.active { background: var(--mcd-red); color: #fff; }
+
+.tab-panel { display: none; padding-bottom: 40px; }
+.tab-panel.active { display: block; }
+
+/* ---------- cards ---------- */
+.card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 18px; margin: 14px 0; box-shadow: var(--shadow);
+}
+.plan {
+  background: var(--card); border-radius: var(--radius);
+  padding: 18px; margin: 14px 0; box-shadow: var(--shadow);
+  border-left: 5px solid var(--mcd-yellow);
+}
+
+.row-between { display: flex; justify-content: space-between; align-items: center; }
+h2 { font-size: 16px; margin: 0 0 12px; font-weight: 700; }
+
+/* ---------- controls ---------- */
+.ctrl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.ctrl-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.grow { flex: 1 1 200px; }
+.label { font-size: 12px; color: var(--ink-2); font-weight: 600; }
+.label b { color: var(--ink); }
+
+.num-row { display: flex; align-items: baseline; gap: 6px; }
+input[type=number] {
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 8px 10px; font-size: 17px; font-weight: 700; width: 100%;
+  color: var(--ink); background: #fff;
+}
+.unit { font-size: 12px; color: var(--ink-3); }
+input[type=range] { width: 100%; accent-color: var(--mcd-red); margin-top: 2px; }
+input[type=text] {
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 9px 12px; font-size: 15px; width: 100%; color: var(--ink);
+}
+select {
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 9px 10px; font-size: 14px; background: #fff; color: var(--ink); width: 100%;
+}
+#fill-wrap { display: flex; align-items: center; gap: 8px; }
+#fill-wrap input[type=range] { width: 110px; }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  border: 1.5px solid var(--line); background: #fff; cursor: pointer;
+  border-radius: 999px; padding: 6px 15px; font-size: 13px;
+  color: var(--ink-2); font-weight: 600;
+}
+.chip:hover { border-color: var(--mcd-yellow); }
+.chip.active { background: var(--mcd-red); border-color: var(--mcd-red); color: #fff; }
+
+.hint { font-size: 12px; color: var(--ink-3); margin: 10px 0 0; }
+
+/* ---------- plan cards ---------- */
+.plan-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.plan-title { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.plan-kcal { font-size: 26px; font-weight: 700; line-height: 1.1; text-align: right; }
+.plan-kcal small { display: block; font-size: 12px; font-weight: 500; color: var(--ink-3); }
+.plan-price {
+  font-size: 18px; font-weight: 700; color: var(--mcd-red);
+  text-align: right; margin-top: 4px;
+}
+
+.foods { display: flex; gap: 12px; flex-wrap: wrap; margin: 14px 0; }
+.food { width: 96px; text-align: center; position: relative; }
+.food .thumb {
+  width: 84px; height: 84px; border-radius: 14px; margin: 0 auto;
+  background: #f2efe9; overflow: hidden; display: grid; place-items: center;
+}
+.food img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.food .ph { font-size: 26px; font-weight: 700; color: var(--ink-3); }
+.food .pbadge {
+  position: absolute; top: 0; right: 2px;
+  background: var(--mcd-red); color: #fff; font-size: 11px; font-weight: 700;
+  padding: 2px 7px; border-radius: 999px;
+}
+.food .name { font-size: 12px; margin-top: 6px; line-height: 1.35; }
+.food .sub { font-size: 11px; color: var(--ink-3); }
+.food .gone { color: var(--mcd-red); }
+
+.metrics {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+  background: #faf9f7; border-radius: 12px; padding: 10px 12px;
+}
+.metrics div { text-align: center; }
+.metrics .m-val { font-size: 15px; font-weight: 700; }
+.metrics .m-val.warn { color: var(--mcd-red); }
+.metrics .m-key { font-size: 11px; color: var(--ink-3); }
+
+.bar { height: 7px; border-radius: 4px; background: #efece7; margin-top: 12px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--mcd-yellow); }
+.bar.over i { background: var(--mcd-red); }
+
+.tags { font-size: 12px; color: var(--ink-3); margin-top: 10px; }
+
+/* ---------- picker / basket ---------- */
+.picker {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 10px; max-height: 320px; overflow-y: auto; margin-top: 12px;
+}
+.picker button {
+  border: 1.5px solid var(--line); background: #fff; border-radius: 12px;
+  padding: 8px; font-size: 12px; cursor: pointer; color: var(--ink);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.picker button:hover { border-color: var(--mcd-red); }
+.picker button img { width: 54px; height: 54px; object-fit: cover; border-radius: 10px; }
+.picker button .dot {
+  width: 54px; height: 54px; border-radius: 10px; background: #f2efe9;
+  display: grid; place-items: center; font-weight: 700; color: var(--ink-3);
+}
+.picker .pk { font-size: 11px; color: var(--mcd-red); font-weight: 700; }
+
+.basket { display: flex; gap: 12px; flex-wrap: wrap; min-height: 60px; }
+.basket .empty { color: var(--ink-3); font-size: 13px; }
+
+.totals { margin-top: 16px; display: none; }
+.totals.on { display: block; }
+
+.ghost {
+  border: 1.5px solid var(--line); background: #fff; border-radius: 999px;
+  padding: 5px 14px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink-2);
+}
+.ghost:hover { border-color: var(--mcd-red); color: var(--mcd-red); }
+
+/* ---------- footer ---------- */
+.site-footer {
+  background: #292726; color: #b8b5ae;
+  padding: 24px 0 44px; font-size: 12px;
+}
+.site-footer p { margin: 5px 0; }
+.site-footer a { color: #e0ddd6; }
+
+@media (max-width: 720px) {
+  .ctrl-grid { grid-template-columns: 1fr; }
+  .metrics { grid-template-columns: repeat(3, 1fr); }
+  .hero-row { flex-direction: column; align-items: flex-start; }
+}
+
+</style>
 </head>
 <body>
 
@@ -155,6 +358,487 @@
   </div>
 </footer>
 
-<script src="app.js"></script>
+<script>
+window.__MCD_DATA__ = {
+  nutrition: {"generated_at":"2026-10-23","source":"McDonald's China MCP list-nutrition-foods","price_note":"价格单位为元，取各门店中位数；不同城市/门店定价不同，仅供参考","price_stores":["1420762","1420412","1950978","1950353","1401010","1400014","3450177","3450235","1960222","1960251"],"count":158,"available":138,"items":[{"n":"猪柳麦满分","k":308,"p":16,"f":16,"c":24,"na":781,"ca":213,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_5024_320.png","pr":14.0,"av":true},{"n":"猪柳蛋麦满分","k":387,"p":23,"f":21,"c":25,"na":846,"ca":243,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250709/product/MS_5022_320.png","pr":18.0,"av":true},{"n":"烟肉蛋麦满分","k":260,"p":16,"f":10,"c":24,"na":483,"ca":238,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250709/product/MS_5022_320.png","pr":18.0,"av":true},{"n":"火腿扒麦满分","k":261,"p":14,"f":12,"c":24,"na":608,"ca":131,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1254_320.png","pr":11.0,"av":true},{"n":"中薯条","k":289,"p":4,"f":12,"c":38,"na":165,"ca":18,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png","pr":14.0,"av":true},{"n":"大薯条","k":379,"p":6,"f":16,"c":50,"na":216,"ca":23,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png","pr":14.0,"av":true},{"n":"小薯条","k":210,"p":3,"f":9,"c":28,"na":120,"ca":13,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png","pr":14.0,"av":true},{"n":"迷你薯条","k":106,"p":2,"f":4,"c":14,"na":61,"ca":6,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png","pr":14.0,"av":true},{"n":"圆筒冰淇淋","k":93,"p":2,"f":3,"c":14,"na":36,"ca":77,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515837_320.png","pr":5.0,"av":true},{"n":"麦乐鸡5块","k":213,"p":12,"f":12,"c":13,"na":422,"ca":9,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260529/product/MS_G1401_320.png","pr":14.5,"av":true},{"n":"大杯玉米杯","k":87,"p":4,"f":1,"c":12,"na":2,"ca":10,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G4437_320.png","pr":13.0,"av":true},{"n":"小杯玉米杯","k":53,"p":2,"f":1,"c":7,"na":1,"ca":6,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G4437_320.png","pr":13.0,"av":true},{"n":"麦辣鸡翅-2块","k":224,"p":13,"f":15,"c":9,"na":537,"ca":13,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260325/product/MS_G1700_320.png","pr":15.0,"av":true},{"n":"朱古力新地","k":282,"p":5,"f":9,"c":44,"na":126,"ca":182,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008745_320.gif","pr":12.0,"av":true},{"n":"草莓新地","k":245,"p":4,"f":6,"c":43,"na":84,"ca":158,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008745_320.gif","pr":12.0,"av":true},{"n":"奥利奥麦旋风","k":266,"p":5,"f":9,"c":40,"na":116,"ca":185,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008754_320.gif","pr":15.5,"av":true},{"n":"草莓麦旋风","k":295,"p":6,"f":9,"c":47,"na":122,"ca":186,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G521950_320.gif","pr":16.5,"av":true},{"n":"香芋派","k":232,"p":2,"f":12,"c":28,"na":159,"ca":7,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008752_320.gif","pr":8.5,"av":true},{"n":"菠萝派","k":221,"p":2,"f":11,"c":27,"na":147,"ca":5,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008752_320.gif","pr":8.5,"av":true},{"n":"大脆鸡扒麦满分","k":361,"p":16,"f":17,"c":35,"na":804,"ca":130,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_5889_320.png","pr":11.0,"av":true},{"n":"原味板烧鸡腿麦满分","k":246,"p":15,"f":9,"c":25,"na":611,"ca":133,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_6800_320.png","pr":15.0,"av":true},{"n":"双层原味板烧鸡腿麦满分","k":355,"p":23,"f":17,"c":27,"na":984,"ca":138,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_4989_320.png","pr":19.0,"av":true},{"n":"吉士汉堡包","k":294,"p":16,"f":12,"c":30,"na":673,"ca":144,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260824/product/MS_G504971_320.png","pr":26.0,"av":true},{"n":"双层吉士汉堡","k":429,"p":27,"f":22,"c":31,"na":1017,"ca":232,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_1120_320.png","pr":23.0,"av":true},{"n":"麦香鸡","k":369,"p":15,"f":17,"c":39,"na":731,"ca":73,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1450_320.png","pr":17.0,"av":true},{"n":"麦香鱼","k":325,"p":16,"f":13,"c":35,"na":556,"ca":99,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260101/product/MS_1600_320.png","pr":22.5,"av":true},{"n":"麦辣鸡腿汉堡","k":485,"p":24,"f":24,"c":42,"na":1208,"ca":154,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260325/product/MS_1440_320.png","pr":22.5,"av":true},{"n":"板烧鸡腿堡","k":391,"p":23,"f":17,"c":35,"na":1041,"ca":93,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20241008/product/MS_1406_320.png","pr":23.5,"av":true},{"n":"巨无霸","k":513,"p":27,"f":26,"c":42,"na":961,"ca":171,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_1100_320.png","pr":26.5,"av":true},{"n":"培根蔬萃双层牛堡","k":442,"p":24,"f":23,"c":34,"na":728,"ca":73,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_1106_320.png","pr":24.5,"av":true},{"n":"可乐中杯","k":147,"p":0,"f":0,"c":36,"na":0,"ca":10,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif","pr":9.5,"av":true},{"n":"可乐大杯","k":224,"p":0,"f":0,"c":55,"na":0,"ca":15,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif","pr":9.5,"av":true},{"n":"可乐小杯","k":107,"p":0,"f":0,"c":26,"na":0,"ca":7,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif","pr":9.5,"av":true},{"n":"雪碧中杯","k":105,"p":0,"f":0,"c":26,"na":29,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G3010_320.png","pr":9.5,"av":true},{"n":"雪碧大杯","k":160,"p":0,"f":0,"c":39,"na":45,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G3010_320.png","pr":9.5,"av":true},{"n":"雪碧小杯","k":76,"p":0,"f":0,"c":19,"na":21,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G3010_320.png","pr":9.5,"av":true},{"n":"无糖可口可乐中杯","k":0,"p":0,"f":0,"c":1,"na":35,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif","pr":9.5,"av":true},{"n":"无糖可口可乐大杯","k":0,"p":0,"f":0,"c":1,"na":53,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif","pr":9.5,"av":true},{"n":"无糖可口可乐小杯","k":0,"p":0,"f":0,"c":0,"na":25,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif","pr":9.5,"av":true},{"n":"大杯鲜萃咖啡","k":13,"p":1,"f":0,"c":0,"na":3,"ca":8,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_G520688_320.gif","pr":9.5,"av":true},{"n":"小杯鲜萃咖啡","k":15,"p":1,"f":0,"c":3,"na":2,"ca":6,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_G520688_320.gif","pr":9.5,"av":true},{"n":"锡兰红茶","k":2,"p":0,"f":0,"c":0,"na":0,"ca":5,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_3505_320.png","pr":11.5,"av":true},{"n":"热朱古力","k":125,"p":2,"f":2,"c":22,"na":107,"ca":36,"cat":"drink","img":"","pr":null,"av":false},{"n":"纯牛奶（盒装）","k":129,"p":7,"f":7,"c":10,"na":73,"ca":231,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png","pr":19.0,"av":true},{"n":"麦旋酷阳光橙","k":228,"p":1,"f":2,"c":50,"na":77,"ca":52,"cat":"drink","img":"","pr":null,"av":false},{"n":"浓缩咖啡","k":13,"p":1,"f":0,"c":2,"na":0,"ca":7,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_507389_320.png","pr":15.0,"av":true},{"n":"那么大鸡排","k":385,"p":24,"f":21,"c":24,"na":996,"ca":13,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260101/product/MS_521156_320.png","pr":14.0,"av":true},{"n":"阳光柠檬红茶中杯","k":117,"p":0,"f":0,"c":29,"na":17,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515280_320.png","pr":9.5,"av":true},{"n":"阳光柠檬红茶大杯","k":178,"p":0,"f":0,"c":43,"na":25,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515280_320.png","pr":9.5,"av":true},{"n":"阳光柠檬红茶小杯","k":85,"p":0,"f":0,"c":21,"na":12,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515280_320.png","pr":9.5,"av":true},{"n":"脆薯饼","k":146,"p":1,"f":9,"c":14,"na":311,"ca":7,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_521741_320.png","pr":8.5,"av":true},{"n":"脆香油条","k":202,"p":5,"f":12,"c":19,"na":230,"ca":18,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_2631_320.png","pr":8.5,"av":true},{"n":"100%苹果汁","k":88,"p":0,"f":0,"c":21,"na":0,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250430/product/MS_6362_320_1745552987716.png","pr":11.5,"av":true},{"n":"汉堡包","k":248,"p":13,"f":8,"c":29,"na":492,"ca":61,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260824/product/MS_G504971_320.png","pr":26.0,"av":true},{"n":"麦乐鸡4块","k":170,"p":10,"f":10,"c":11,"na":337,"ca":7,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260529/product/MS_G1401_320.png","pr":14.5,"av":true},{"n":"纯悦","k":0,"p":0,"f":0,"c":0,"na":0,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20240904/product/MS_3757_320.png","pr":7.5,"av":true},{"n":"苹果片","k":32,"p":0,"f":0,"c":7,"na":0,"ca":18,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_6102_320.png","pr":7.0,"av":true},{"n":"不素之霸双层牛堡","k":493,"p":28,"f":27,"c":34,"na":1012,"ca":75,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_4648_320.png","pr":26.5,"av":true},{"n":"双层深海鳕鱼堡","k":485,"p":28,"f":21,"c":46,"na":917,"ca":147,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900003586_320.png","pr":24.0,"av":true},{"n":"儿童鱼排堡","k":269,"p":15,"f":6,"c":36,"na":442,"ca":58,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900016058_320.png","pr":24.0,"av":true},{"n":"培根安格斯厚牛堡","k":707,"p":34,"f":44,"c":43,"na":1037,"ca":161,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_511781_320.png","pr":34.5,"av":true},{"n":"芝士安格斯厚牛堡","k":696,"p":32,"f":44,"c":43,"na":897,"ca":150,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_511782_320.png","pr":31.5,"av":true},{"n":"yeyeyeye奶冻款","k":223,"p":1,"f":4,"c":43,"na":37,"ca":64,"cat":"dessert","img":"","pr":null,"av":false},{"n":"皮蛋鸡肉粥","k":133,"p":6,"f":3,"c":20,"na":611,"ca":20,"cat":"main","img":"","pr":null,"av":false},{"n":"雪菜脆笋鸡肉粥","k":120,"p":4,"f":2,"c":22,"na":552,"ca":14,"cat":"main","img":"","pr":null,"av":false},{"n":"猪柳炒双蛋堡","k":437,"p":25,"f":24,"c":29,"na":705,"ca":116,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_502773_320.png","pr":18.0,"av":true},{"n":"yeyeyeye爆珠款","k":212,"p":1,"f":3,"c":42,"na":122,"ca":124,"cat":"dessert","img":"","pr":null,"av":false},{"n":"柠檬拉明顿","k":121,"p":2,"f":7,"c":12,"na":35,"ca":17,"cat":"dessert","img":"","pr":null,"av":false},{"n":"芝士双层安格斯厚牛堡","k":1003,"p":58,"f":65,"c":46,"na":1373,"ca":251,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_511782_320.png","pr":31.5,"av":true},{"n":"培根双层安格斯厚牛堡","k":987,"p":55,"f":64,"c":46,"na":1191,"ca":226,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_511781_320.png","pr":34.5,"av":true},{"n":"火腿扒早安营养卷","k":444,"p":16,"f":24,"c":39,"na":1065,"ca":108,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_513112_320.png","pr":15.5,"av":true},{"n":"麦麦脆汁鸡-琵琶腿","k":328,"p":21,"f":20,"c":16,"na":905,"ca":24,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","pr":15.0,"av":true},{"n":"德式图林根香肠","k":87,"p":5,"f":6,"c":2,"na":293,"ca":5,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_505235_320.png","pr":9.5,"av":true},{"n":"图林根香肠早安营养卷","k":425,"p":14,"f":23,"c":38,"na":977,"ca":68,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_513113_320.png","pr":16.0,"av":true},{"n":"麦麦脆汁鸡-带骨里脊","k":332,"p":22,"f":18,"c":16,"na":812,"ca":25,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","pr":15.0,"av":true},{"n":"【美汁源】“黄金橙橙”","k":165,"p":0,"f":0,"c":41,"na":53,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20240904/product/MS_2430_320.png","pr":13.0,"av":true},{"n":"优品豆浆大杯","k":202,"p":8,"f":4,"c":33,"na":43,"ca":21,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1088_320.png","pr":9.5,"av":true},{"n":"优品豆浆小杯","k":151,"p":6,"f":3,"c":25,"na":32,"ca":15,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1088_320.png","pr":9.5,"av":true},{"n":"浓浓黑巧雪冰中杯","k":359,"p":8,"f":12,"c":51,"na":224,"ca":207,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif","pr":13.9,"av":true},{"n":"浓浓黑巧雪冰大杯","k":444,"p":11,"f":14,"c":65,"na":258,"ca":251,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif","pr":13.9,"av":true},{"n":"特浓奶香雪冰中杯","k":269,"p":6,"f":11,"c":36,"na":180,"ca":188,"cat":"dessert","img":"","pr":null,"av":false},{"n":"特浓奶香雪冰大杯","k":309,"p":7,"f":12,"c":42,"na":192,"ca":223,"cat":"dessert","img":"","pr":null,"av":false},{"n":"浓浓抹茶雪冰中杯","k":289,"p":7,"f":11,"c":39,"na":181,"ca":220,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250611/product/MS_G515949_320.png","pr":23.0,"av":true},{"n":"浓浓抹茶雪冰大杯","k":339,"p":8,"f":12,"c":48,"na":194,"ca":270,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250611/product/MS_G515949_320.png","pr":23.0,"av":true},{"n":"热牛奶中杯","k":176,"p":10,"f":8,"c":15,"na":101,"ca":319,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png","pr":19.0,"av":true},{"n":"热牛奶大杯","k":240,"p":13,"f":11,"c":21,"na":137,"ca":435,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png","pr":19.0,"av":true},{"n":"热牛奶小杯","k":147,"p":8,"f":7,"c":13,"na":84,"ca":267,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png","pr":19.0,"av":true},{"n":"冰牛奶中杯","k":224,"p":13,"f":11,"c":19,"na":128,"ca":406,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_510041_320.png","pr":19.0,"av":true},{"n":"冰牛奶大杯","k":269,"p":15,"f":13,"c":23,"na":154,"ca":487,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_510041_320.png","pr":19.0,"av":true},{"n":"冰牛奶小杯","k":147,"p":8,"f":7,"c":13,"na":84,"ca":267,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_510041_320.png","pr":19.0,"av":true},{"n":"冰奶铁中杯","k":148,"p":8,"f":7,"c":13,"na":77,"ca":251,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507372_320.gif","pr":13.9,"av":true},{"n":"冰奶铁大杯","k":162,"p":9,"f":7,"c":15,"na":85,"ca":275,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507372_320.gif","pr":13.9,"av":true},{"n":"冰奶铁小杯","k":86,"p":5,"f":4,"c":8,"na":44,"ca":144,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507372_320.gif","pr":13.9,"av":true},{"n":"热奶铁中杯","k":186,"p":11,"f":8,"c":17,"na":99,"ca":320,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507328_320.png","pr":13.9,"av":true},{"n":"热奶铁大杯","k":249,"p":14,"f":11,"c":22,"na":134,"ca":431,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507328_320.png","pr":13.9,"av":true},{"n":"热奶铁小杯","k":134,"p":8,"f":6,"c":12,"na":72,"ca":231,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507328_320.png","pr":13.9,"av":true},{"n":"冰燕麦奶铁中杯","k":132,"p":3,"f":5,"c":17,"na":87,"ca":270,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"冰燕麦奶铁大杯","k":145,"p":4,"f":5,"c":19,"na":96,"ca":296,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"冰燕麦奶铁小杯","k":77,"p":2,"f":3,"c":10,"na":50,"ca":155,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"热燕麦奶铁中杯","k":167,"p":4,"f":6,"c":22,"na":112,"ca":345,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"热燕麦奶铁大杯","k":222,"p":5,"f":8,"c":29,"na":152,"ca":464,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"热燕麦奶铁小杯","k":120,"p":3,"f":5,"c":16,"na":81,"ca":248,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"冰美式中杯","k":13,"p":1,"f":0,"c":2,"na":0,"ca":7,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507374_320.gif","pr":11.9,"av":true},{"n":"冰美式大杯","k":14,"p":1,"f":0,"c":2,"na":0,"ca":8,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507374_320.gif","pr":11.9,"av":true},{"n":"冰美式小杯","k":10,"p":1,"f":0,"c":1,"na":0,"ca":6,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507374_320.gif","pr":11.9,"av":true},{"n":"热美式中杯","k":13,"p":1,"f":0,"c":2,"na":0,"ca":7,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507368_320.png","pr":11.9,"av":true},{"n":"热美式大杯","k":14,"p":1,"f":0,"c":2,"na":0,"ca":8,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507368_320.png","pr":11.9,"av":true},{"n":"热美式小杯","k":10,"p":1,"f":0,"c":1,"na":0,"ca":6,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507368_320.png","pr":11.9,"av":true},{"n":"冰焦糖玛奇朵","k":148,"p":8,"f":7,"c":13,"na":77,"ca":251,"cat":"drink","img":"","pr":null,"av":false},{"n":"热焦糖玛奇朵","k":167,"p":9,"f":7,"c":15,"na":88,"ca":284,"cat":"drink","img":"","pr":null,"av":false},{"n":"卡布奇诺中杯","k":167,"p":9,"f":7,"c":15,"na":88,"ca":285,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_G507388_320.png","pr":21.0,"av":true},{"n":"卡布奇诺大杯","k":223,"p":13,"f":10,"c":20,"na":120,"ca":385,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_G507388_320.png","pr":21.0,"av":true},{"n":"冰浓浓燕麦黑巧中杯","k":120,"p":2,"f":5,"c":16,"na":87,"ca":263,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":15.9,"av":true},{"n":"冰浓浓燕麦黑巧大杯","k":131,"p":3,"f":5,"c":17,"na":95,"ca":388,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":15.9,"av":true},{"n":"冰燕麦奶中杯","k":199,"p":4,"f":8,"c":26,"na":145,"ca":438,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"冰燕麦奶大杯","k":239,"p":5,"f":9,"c":32,"na":174,"ca":525,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"冰燕麦奶小杯","k":131,"p":3,"f":5,"c":17,"na":95,"ca":288,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"热燕麦奶中杯","k":157,"p":3,"f":6,"c":21,"na":114,"ca":344,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"热燕麦奶大杯","k":213,"p":4,"f":8,"c":28,"na":156,"ca":469,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"热燕麦奶小杯","k":131,"p":3,"f":5,"c":17,"na":95,"ca":288,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":21.0,"av":true},{"n":"冰浓浓抹茶牛奶中杯","k":196,"p":8,"f":6,"c":25,"na":80,"ca":275,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png","pr":19.0,"av":true},{"n":"冰浓浓抹茶牛奶大杯","k":240,"p":9,"f":7,"c":33,"na":89,"ca":314,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png","pr":19.0,"av":true},{"n":"热浓浓抹茶牛奶中杯","k":238,"p":11,"f":8,"c":29,"na":104,"ca":351,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png","pr":19.0,"av":true},{"n":"热浓浓抹茶牛奶大杯","k":333,"p":14,"f":12,"c":41,"na":142,"ca":482,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png","pr":19.0,"av":true},{"n":"冰浓浓黑巧中杯","k":135,"p":8,"f":6,"c":12,"na":77,"ca":244,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif","pr":13.9,"av":true},{"n":"冰浓浓黑巧大杯","k":147,"p":8,"f":7,"c":13,"na":84,"ca":267,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif","pr":13.9,"av":true},{"n":"热浓浓黑巧中杯","k":176,"p":10,"f":8,"c":15,"na":101,"ca":319,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif","pr":13.9,"av":true},{"n":"热浓浓黑巧大杯","k":240,"p":13,"f":11,"c":21,"na":137,"ca":435,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/20261008/product/MS_G515945_320.gif","pr":13.9,"av":true},{"n":"川宁伯爵红茶","k":2,"p":0,"f":0,"c":0,"na":0,"ca":0,"cat":"drink","img":"","pr":null,"av":false},{"n":"抹茶阿芙佳朵","k":147,"p":3,"f":4,"c":23,"na":50,"ca":136,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_514851_320.png","pr":15.0,"av":true},{"n":"咖啡阿芙佳朵","k":139,"p":4,"f":4,"c":21,"na":49,"ca":111,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_514851_320.png","pr":15.0,"av":true},{"n":"热浓浓燕麦黑巧中杯","k":157,"p":3,"f":6,"c":21,"na":114,"ca":344,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":15.9,"av":true},{"n":"热浓浓燕麦黑巧大杯","k":213,"p":4,"f":8,"c":28,"na":156,"ca":469,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G510489_320.png","pr":15.9,"av":true},{"n":"草莓拉明顿","k":121,"p":2,"f":8,"c":11,"na":34,"ca":17,"cat":"dessert","img":"","pr":null,"av":false},{"n":"原味板烧鸡腿炒双蛋堡","k":419,"p":27,"f":21,"c":30,"na":715,"ca":116,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_514700_320.png","pr":18.0,"av":true},{"n":"双层猪柳蛋麦满分","k":513,"p":29,"f":32,"c":26,"na":1210,"ca":249,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_520830_320_1745825365408.png","pr":21.0,"av":true},{"n":"双层火腿扒麦满分","k":385,"p":21,"f":22,"c":26,"na":979,"ca":134,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1254_320.png","pr":11.0,"av":true},{"n":"脆脆薯条","k":279,"p":4,"f":14,"c":32,"na":540,"ca":13,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png","pr":14.0,"av":true},{"n":"麦麦趣鸡球","k":266,"p":17,"f":13,"c":19,"na":789,"ca":13,"cat":"side","img":"","pr":null,"av":false},{"n":"酥酥多笋卷","k":342,"p":14,"f":15,"c":36,"na":1044,"ca":41,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_521816_320.png","pr":20.5,"av":true},{"n":"薄皮焦香V翅","k":192,"p":17,"f":11,"c":6,"na":594,"ca":15,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20241202/product/MS_520445_320.png","pr":16.0,"av":true},{"n":"蜜汁BBQ风味薄皮脆汁鸡-带骨里脊","k":152,"p":20,"f":5,"c":6,"na":635,"ca":28,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","pr":15.0,"av":true},{"n":"蜜汁BBQ风味薄皮脆汁鸡-琵琶腿","k":173,"p":18,"f":9,"c":5,"na":547,"ca":15,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","pr":15.0,"av":true},{"n":"果然多肉","k":478,"p":36,"f":17,"c":44,"na":1343,"ca":190,"cat":"main","img":"","pr":null,"av":false},{"n":"“苹板”支撑Pro","k":476,"p":25,"f":18,"c":50,"na":1077,"ca":117,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900009242_320.png","pr":39.5,"av":true},{"n":"专“薯鱼”你","k":463,"p":18,"f":17,"c":57,"na":652,"ca":123,"cat":"main","img":"","pr":null,"av":false},{"n":"绝代双翅","k":469,"p":32,"f":27,"c":23,"na":1167,"ca":34,"cat":"main","img":"","pr":null,"av":false},{"n":"牛气满满","k":495,"p":26,"f":24,"c":42,"na":764,"ca":79,"cat":"main","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900009245_320.png","pr":35.0,"av":true},{"n":"蜜汁快乐","k":258,"p":22,"f":9,"c":20,"na":721,"ca":34,"cat":"main","img":"","pr":null,"av":false},{"n":"迷你朱古力新地","k":140,"p":3,"f":4,"c":22,"na":63,"ca":90,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008745_320.gif","pr":12.0,"av":true},{"n":"迷你草莓新地","k":122,"p":2,"f":3,"c":21,"na":42,"ca":78,"cat":"dessert","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G9900008745_320.gif","pr":12.0,"av":true},{"n":"鲜蔬蛋沙拉叠叠卷","k":266,"p":11,"f":14,"c":24,"na":518,"ca":62,"cat":"main","img":"","pr":null,"av":false},{"n":"鸡肉蛋沙拉叠叠卷","k":387,"p":17,"f":21,"c":31,"na":842,"ca":67,"cat":"main","img":"","pr":null,"av":false},{"n":"中杯怡泉+C","k":110,"p":0,"f":0,"c":27,"na":0,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515520_320.png","pr":11.5,"av":true},{"n":"大杯怡泉+C","k":168,"p":0,"f":0,"c":41,"na":0,"ca":0,"cat":"drink","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G515520_320.png","pr":11.5,"av":true},{"n":"蒜了吧黄油风味薄皮脆汁鸡-琵琶腿","k":164,"p":19,"f":6,"c":6,"na":867,"ca":9,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","pr":15.0,"av":true},{"n":"蒜了吧黄油风味薄皮脆汁鸡-带骨里脊","k":126,"p":19,"f":2,"c":4,"na":750,"ca":59,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","pr":15.0,"av":true},{"n":"柠萌风味薄皮焦香V翅","k":204,"p":18,"f":11,"c":6,"na":768,"ca":22,"cat":"side","img":"https://menu-img.mcd.cn/pcm/prod/menu/20241202/product/MS_520445_320.png","pr":16.0,"av":true}]},
+  combos: {"count":8,"combos":[{"id":"hp-500-8f3a","name":"500 卡增肌餐","author":"1061136002","created_at":"2026-10-23","goal":"high_protein","tags":["增肌","高蛋白"],"budget":500,"items":["蜜汁快乐","蜜汁BBQ风味薄皮脆汁鸡-带骨里脊","冰奶铁小杯"],"note":"蛋白质 47g，热量利用率极高。钠 1400mg 偏高，控钠人群换成下面的控钠餐。","nutrition":{"energy_kcal":496,"protein_g":47,"fat_g":18,"carbohydrate_g":34,"sodium_mg":1400,"calcium_mg":206},"images":["","https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507372_320.gif"],"price":null,"all_available":false},{"id":"bl-600-2c19","name":"600 卡均衡正餐","author":"1061136002","created_at":"2026-10-23","goal":"balanced","tags":["午餐","均衡"],"budget":600,"items":["蜜汁快乐","蜜汁BBQ风味薄皮脆汁鸡-带骨里脊","热奶铁中杯"],"note":"53g 蛋白 + 382mg 钙，作为一天的主餐比较扎实。","nutrition":{"energy_kcal":596,"protein_g":53,"fat_g":22,"carbohydrate_g":43,"sodium_mg":1455,"calcium_mg":382},"images":["","https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507328_320.png"],"price":null,"all_available":false},{"id":"ls-600-d470","name":"600 卡控钠餐","author":"1061136002","created_at":"2026-10-23","goal":"low_sodium","tags":["控钠","高血压友好"],"budget":600,"items":["小薯条","热奶铁大杯"],"note":"全库钠最低的组合之一，仅 254mg。代价是蛋白质偏低，不建议长期单独吃。","nutrition":{"energy_kcal":459,"protein_g":17,"fat_g":20,"carbohydrate_g":50,"sodium_mg":254,"calcium_mg":444},"images":["https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320_1747877491921.png","https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507328_320.png"],"price":27.9,"all_available":true},{"id":"lc-400-5ae1","name":"400 卡低碳餐","author":"1061136002","created_at":"2026-10-23","goal":"low_carb","tags":["低碳","减脂"],"budget":400,"items":["烟肉蛋麦满分","蒜了吧黄油风味薄皮脆汁鸡-带骨里脊","大杯鲜萃咖啡"],"note":"碳水仅 28g，早餐时段可点。咖啡不加糖不加奶。","nutrition":{"energy_kcal":399,"protein_g":36,"fat_g":12,"carbohydrate_g":28,"sodium_mg":1236,"calcium_mg":305},"images":["https://menu-img.mcd.cn/pcm/prod/menu/20250709/product/MS_5022_320.png","https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","https://menu-img.mcd.cn/pcm/prod/menu/20250324/product/MS_G520688_320.gif"],"price":42.5,"all_available":true},{"id":"ca-700-91bd","name":"700 卡补钙餐","author":"1061136002","created_at":"2026-10-23","goal":"high_calcium","tags":["补钙","高蛋白"],"budget":700,"items":["蜜汁快乐","蜜汁BBQ风味薄皮脆汁鸡-带骨里脊","冰牛奶大杯"],"note":"钙 549mg，约占成人每日推荐量一半以上，同时有 57g 蛋白。","nutrition":{"energy_kcal":679,"protein_g":57,"fat_g":27,"carbohydrate_g":49,"sodium_mg":1510,"calcium_mg":549},"images":["","https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_510041_320.png"],"price":null,"all_available":false},{"id":"lt-350-3f7c","name":"350 卡轻食","author":"1061136002","created_at":"2026-10-23","goal":"balanced","tags":["轻食","加餐"],"budget":350,"items":["蜜汁BBQ风味薄皮脆汁鸡-带骨里脊","热奶铁中杯"],"note":"两件套，31g 蛋白，适合当下午加餐或预算紧张时救急。","nutrition":{"energy_kcal":338,"protein_g":31,"fat_g":13,"carbohydrate_g":23,"sodium_mg":734,"calcium_mg":348},"images":["https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900005432_320.png","https://menu-img.mcd.cn/pcm/prod/menu/20250521/product/MS_507328_320.png"],"price":28.9,"all_available":true},{"id":"br-450-6d28","name":"450 卡经典早餐","author":"1061136002","created_at":"2026-10-23","goal":"balanced","tags":["早餐","经典"],"budget":450,"items":["猪柳蛋麦满分","小杯玉米杯","冰美式大杯"],"note":"最常规的麦当劳早餐组合，钠 847mg 在同类里算克制。","nutrition":{"energy_kcal":454,"protein_g":26,"fat_g":22,"carbohydrate_g":34,"sodium_mg":847,"calcium_mg":257},"images":["https://menu-img.mcd.cn/pcm/prod/menu/20250709/product/MS_5022_320.png","https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G4437_320.png","https://menu-img.mcd.cn/pcm/prod/menu/20260422/product/MS_G507374_320.gif"],"price":42.9,"all_available":true},{"id":"vg-530-a0e4","name":"530 卡蔬食餐","author":"1061136002","created_at":"2026-10-23","goal":"balanced","tags":["蔬食","低钠"],"budget":530,"items":["鲜蔬蛋沙拉叠叠卷","大杯玉米杯","热牛奶中杯"],"note":"无肉组合，钠仅 621mg、钙 391mg，是库里最均衡的素食选择。","nutrition":{"energy_kcal":529,"protein_g":25,"fat_g":23,"carbohydrate_g":51,"sodium_mg":621,"calcium_mg":391},"images":["","https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G4437_320.png","https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G5073941_320.png"],"price":null,"all_available":false}]},
+  meta: {"price_note":"价格单位为元，取各门店中位数；不同城市/门店定价不同，仅供参考","price_stores":["1420762","1420412","1950978","1950353","1401010","1400014","3450177","3450235","1960222","1960251"],"generated_at":"2026-10-23"}
+};
+</script>
+<script>
+/* 麦麦热量管家 · 网页版
+   纯前端，数据来自麦当劳官方 MCP 的营养数据快照 + 菜单接口的价格与图片。
+   算法与 scripts/plan.py 保持一致。 */
+
+const GOALS = {
+  balanced:     { protein: 1.00, calcium: 0.05, sodium: 0.15, carb: 0.00, label: '均衡' },
+  high_protein: { protein: 1.80, calcium: 0.05, sodium: 0.10, carb: 0.00, label: '高蛋白' },
+  low_sodium:   { protein: 0.50, calcium: 0.05, sodium: 3.00, carb: 0.00, label: '控钠' },
+  low_carb:     { protein: 1.20, calcium: 0.05, sodium: 0.15, carb: 0.15, label: '低碳' },
+  high_calcium: { protein: 0.80, calcium: 0.30, sodium: 0.15, carb: 0.00, label: '补钙' }
+};
+
+const CAT_LABEL = { main: '主食', side: '小食', drink: '饮料', dessert: '甜品' };
+const NA_LIMIT = 2000;
+const PER_PAGE = 5;
+
+const state = {
+  items: [],
+  combos: [],
+  meta: {},
+  budget: 600,
+  money: 60,
+  goal: 'balanced',
+  fill: 0.75,
+  maxItems: 4,
+  exclude: new Set(['dessert']),
+  onlyAvail: true,
+  sort: 'score',
+  page: 0,
+  basket: [],
+  pickerCat: 'all'
+};
+
+const $ = (s) => document.querySelector(s);
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text !== undefined) n.textContent = text;
+  return n;
+};
+const money = (v) => '¥' + (Math.round(v * 10) / 10).toFixed(1);
+
+function totals(items) {
+  const t = { k: 0, p: 0, f: 0, c: 0, na: 0, ca: 0 };
+  for (const i of items) {
+    t.k += i.k; t.p += i.p; t.f += i.f; t.c += i.c; t.na += i.na; t.ca += i.ca;
+  }
+  return t;
+}
+
+function priceOf(items) {
+  const known = items.filter((i) => typeof i.pr === 'number');
+  if (!known.length) return null;
+  return known.reduce((a, i) => a + i.pr, 0);
+}
+
+function score(items, w) {
+  const t = totals(items);
+  return w.protein * t.p + w.calcium * t.ca / 100 - w.sodium * t.na / 100 - w.carb * t.c;
+}
+
+/* ---- 组合搜索：与 plan.py 相同的 DFS + 剪枝 ---- */
+function search(items, budget, w, fill, maxItems, order) {
+  const pools = order.map((cat) =>
+    items.filter((i) => i.cat === cat && i.k <= budget).sort((a, b) => a.k - b.k));
+  const out = [];
+  const picked = [];
+  (function walk(idx, used) {
+    if (out.length >= 20000) return;
+    if (idx === order.length) {
+      if (!picked.length || picked.length > maxItems) return;
+      if (used > budget || used < budget * fill) return;
+      out.push({ items: picked.slice(), t: totals(picked), s: score(picked, w), left: budget - used });
+      return;
+    }
+    walk(idx + 1, used);
+    for (const item of pools[idx]) {
+      if (used + item.k > budget) break;
+      picked.push(item);
+      walk(idx + 1, used + item.k);
+      picked.pop();
+    }
+  })(0, 0);
+  out.sort((a, b) => b.s - a.s || a.left - b.left);
+  return out;
+}
+
+function dedupe(plans) {
+  const seen = new Set();
+  return plans.filter((p) => {
+    const key = p.items.filter((i) => i.cat !== 'drink').map((i) => i.n).join('|');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function diversify(plans) {
+  const count = {};
+  return plans.filter((p) => {
+    const main = (p.items.find((i) => i.cat === 'main') || {}).n || '';
+    count[main] = (count[main] || 0) + 1;
+    return count[main] <= 2;
+  });
+}
+
+/* ---- 渲染小件 ---- */
+function thumb(item, size) {
+  if (item.img) {
+    const img = el('img');
+    img.src = item.img;
+    img.alt = item.n;
+    img.loading = 'lazy';
+    return img;
+  }
+  return el('div', size === 'sm' ? 'dot' : 'ph', item.n.slice(0, 1));
+}
+
+function foodCard(item) {
+  const box = el('div', 'food');
+  const t = el('div', 'thumb');
+  t.appendChild(thumb(item));
+  box.appendChild(t);
+  if (typeof item.pr === 'number') box.appendChild(el('span', 'pbadge', money(item.pr)));
+  box.appendChild(el('div', 'name', item.n));
+  box.appendChild(el('div', 'sub', item.k + ' kcal' + (item.av ? '' : ' · 暂无在售')));
+  if (!item.av) box.querySelector('.sub').classList.add('gone');
+  return box;
+}
+
+function metrics(t) {
+  const box = el('div', 'metrics');
+  const add = (key, val, warn) => {
+    const d = el('div');
+    d.appendChild(el('div', 'm-val' + (warn ? ' warn' : ''), String(val)));
+    d.appendChild(el('div', 'm-key', key));
+    box.appendChild(d);
+  };
+  add('热量', t.k + ' kcal');
+  add('蛋白', t.p + ' g');
+  add('脂肪', t.f + ' g');
+  add('碳水', t.c + ' g');
+  add('钠', t.na + ' mg', t.na > NA_LIMIT * 0.75);
+  add('钙', t.ca + ' mg');
+  return box;
+}
+
+function naNote(t) {
+  if (t.na > NA_LIMIT * 0.75) {
+    return el('p', 'hint', '这一餐的钠 ' + t.na + 'mg，已占成人每日参考摄入量的 ' +
+      Math.round(t.na / NA_LIMIT * 100) + '%，控钠人群慎选。');
+  }
+  return null;
+}
+
+/* ---- 智能配餐 ---- */
+function currentItems() {
+  return state.onlyAvail ? state.items.filter((i) => i.av) : state.items;
+}
+
+function renderPlans() {
+  const box = $('#plans');
+  box.innerHTML = '';
+  const budget = state.budget;
+  const w = GOALS[state.goal];
+  const order = ['main', 'side', 'drink', 'dessert'].filter((c) => !state.exclude.has(c));
+
+  if (!order.length) {
+    box.appendChild(el('p', 'hint', '所有分类都被排除了，至少留一个。'));
+    return;
+  }
+
+  let plans = diversify(dedupe(
+    search(currentItems(), budget, w, state.fill, state.maxItems, order)
+  ));
+
+  const withPrice = plans.filter((p) => priceOf(p.items) !== null);
+  if (state.money > 0) {
+    const affordable = withPrice.filter((p) => priceOf(p.items) <= state.money);
+    if (affordable.length) plans = affordable;
+  }
+
+  const sorters = {
+    'score': null,
+    'price-asc': (a, b) => (priceOf(a.items) ?? 1e9) - (priceOf(b.items) ?? 1e9),
+    'price-desc': (a, b) => (priceOf(b.items) ?? -1) - (priceOf(a.items) ?? -1),
+    'protein': (a, b) => b.t.p - a.t.p,
+    'kcal': (a, b) => a.t.k - b.t.k
+  };
+  if (sorters[state.sort]) plans = plans.slice().sort(sorters[state.sort]);
+
+  const pages = Math.max(1, Math.ceil(plans.length / PER_PAGE));
+  if (state.page >= pages) state.page = 0;
+  const slice = plans.slice(state.page * PER_PAGE, state.page * PER_PAGE + PER_PAGE);
+
+  $('#plan-hint').textContent =
+    '在 ' + currentItems().length + ' 个餐品里搜索 · 目标 ' + w.label +
+    ' · 价格上限 ' + (state.money > 0 ? money(state.money) : '不限') +
+    ' · 共 ' + plans.length + ' 个方案' + (pages > 1 ? '（第 ' + (state.page + 1) + '/' + pages + ' 批）' : '');
+
+  if (!slice.length) {
+    box.appendChild(el('p', 'hint',
+      '这个预算下没有符合条件的组合。试试提高热量预算或价格上限，或降低饱腹度要求。'));
+    return;
+  }
+
+  slice.forEach((p, idx) => {
+    const card = el('div', 'plan');
+    const top = el('div', 'plan-top');
+    const left = el('div');
+    left.appendChild(el('div', 'plan-title', '方案 ' + (state.page * PER_PAGE + idx + 1)));
+    left.appendChild(el('div', 'sub', p.items.map((i) => CAT_LABEL[i.cat]).join(' + ')));
+    top.appendChild(left);
+
+    const right = el('div');
+    const kcal = el('div', 'plan-kcal', String(p.t.k));
+    kcal.appendChild(el('small', null, '/ ' + budget + ' kcal'));
+    right.appendChild(kcal);
+    const pr = priceOf(p.items);
+    if (pr !== null) right.appendChild(el('div', 'plan-price', money(pr)));
+    top.appendChild(right);
+    card.appendChild(top);
+
+    const foods = el('div', 'foods');
+    p.items.forEach((i) => foods.appendChild(foodCard(i)));
+    card.appendChild(foods);
+
+    card.appendChild(metrics(p.t));
+
+    const bar = el('div', 'bar' + (p.t.k > budget ? ' over' : ''));
+    const f = el('i');
+    f.style.width = Math.min(100, Math.round(p.t.k / budget * 100)) + '%';
+    bar.appendChild(f);
+    card.appendChild(bar);
+
+    const note = naNote(p.t);
+    if (note) card.appendChild(note);
+    card.appendChild(el('div', 'tags',
+      '剩余热量预算 ' + p.left + ' kcal' + (pr !== null ? ' · 单价合计 ' + money(pr) : '')));
+
+    box.appendChild(card);
+  });
+}
+
+/* ---- 自己搭配 ---- */
+function renderPicker() {
+  const box = $('#picker');
+  box.innerHTML = '';
+  const kw = ($('#search').value || '').trim();
+  let list = state.items.filter((i) => !kw || i.n.includes(kw));
+  if (state.pickerCat !== 'all') list = list.filter((i) => i.cat === state.pickerCat);
+  list.sort((a, b) => (a.av === b.av ? a.k - b.k : (a.av ? -1 : 1)));
+
+  $('#picker-hint').textContent = '共 ' + list.length + ' 个餐品' +
+    (state.onlyAvail ? '（标注「暂无在售」的是营养库里已下架的季节限定）' : '');
+
+  list.forEach((i) => {
+    const b = el('button');
+    const dot = el('span');
+    dot.appendChild(thumb(i, 'sm'));
+    b.appendChild(dot);
+    b.appendChild(el('span', null, i.n));
+    b.appendChild(el('span', 'pk', i.k + ' kcal' + (typeof i.pr === 'number' ? ' · ' + money(i.pr) : '')));
+    if (!i.av) b.style.opacity = '.55';
+    b.onclick = () => {
+      if (!state.basket.find((x) => x.n === i.n)) state.basket.push(i);
+      renderBasket();
+    };
+    box.appendChild(b);
+  });
+}
+
+function renderBasket() {
+  const box = $('#basket');
+  box.innerHTML = '';
+  if (!state.basket.length) {
+    box.appendChild(el('p', 'empty', '还没选餐品。在上面搜索或按分类挑，点一下加进来。'));
+    $('#totals').className = 'totals';
+    return;
+  }
+  state.basket.forEach((i) => {
+    const wrap = el('div', 'food');
+    wrap.appendChild(foodCard(i));
+    const rm = el('button', 'ghost', '移除');
+    rm.style.marginTop = '6px';
+    rm.onclick = () => {
+      state.basket = state.basket.filter((x) => x.n !== i.n);
+      renderBasket();
+    };
+    wrap.appendChild(rm);
+    box.appendChild(wrap);
+  });
+
+  const t = totals(state.basket);
+  const pr = priceOf(state.basket);
+  const out = $('#totals');
+  out.innerHTML = '';
+  out.className = 'totals on';
+  out.appendChild(metrics(t));
+
+  const bar = el('div', 'bar' + (t.k > state.budget ? ' over' : ''));
+  const f = el('i');
+  f.style.width = Math.min(100, Math.round(t.k / state.budget * 100)) + '%';
+  bar.appendChild(f);
+  out.appendChild(bar);
+
+  const parts = ['对照热量预算 ' + state.budget + ' kcal：' +
+    (t.k > state.budget ? '超出 ' + (t.k - state.budget) : '还剩 ' + (state.budget - t.k))];
+  if (pr !== null) parts.push('合计 ' + money(pr) +
+    (state.money > 0 ? (pr > state.money ? '，超出价格上限 ' + money(pr - state.money) : '，在价格上限内') : ''));
+  out.appendChild(el('p', 'hint', parts.join(' · ')));
+
+  const note = naNote(t);
+  if (note) out.appendChild(note);
+}
+
+/* ---- 社区套餐 ---- */
+function renderCommunity() {
+  const box = $('#community');
+  box.innerHTML = '';
+  state.combos.forEach((c) => {
+    const card = el('div', 'plan');
+    const top = el('div', 'plan-top');
+    const left = el('div');
+    left.appendChild(el('div', 'plan-title', c.name));
+    left.appendChild(el('div', 'sub', c.author + ' · ' + c.created_at));
+    top.appendChild(left);
+
+    const right = el('div');
+    const kcal = el('div', 'plan-kcal', String(c.nutrition.energy_kcal));
+    kcal.appendChild(el('small', null, 'kcal'));
+    right.appendChild(kcal);
+    if (c.price !== null && c.price !== undefined) {
+      right.appendChild(el('div', 'plan-price', money(c.price)));
+    }
+    top.appendChild(right);
+    card.appendChild(top);
+
+    const foods = el('div', 'foods');
+    c.items.forEach((name, idx) => {
+      const item = state.items.find((x) => x.n === name) ||
+        { n: name, k: 0, img: (c.images || [])[idx] || '', av: false };
+      foods.appendChild(foodCard(item));
+    });
+    card.appendChild(foods);
+
+    card.appendChild(metrics({
+      k: c.nutrition.energy_kcal, p: c.nutrition.protein_g, f: c.nutrition.fat_g,
+      c: c.nutrition.carbohydrate_g, na: c.nutrition.sodium_mg, ca: c.nutrition.calcium_mg
+    }));
+    if (c.note) card.appendChild(el('p', 'hint', c.note));
+    if (c.tags && c.tags.length) card.appendChild(el('div', 'tags', '标签：' + c.tags.join('、')));
+
+    const load = el('button', 'ghost', '载入我的套餐');
+    load.style.marginTop = '10px';
+    load.onclick = () => {
+      state.basket = c.items.map((n) => state.items.find((x) => x.n === n)).filter(Boolean);
+      switchTab('analyze');
+      renderBasket();
+    };
+    card.appendChild(load);
+    box.appendChild(card);
+  });
+}
+
+/* ---- 交互 ---- */
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t) => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach((p) => p.classList.toggle('active', p.id === 'tab-' + name));
+}
+
+function bind() {
+  document.querySelectorAll('.tab').forEach((t) => { t.onclick = () => switchTab(t.dataset.tab); });
+
+  const budget = $('#budget'), brange = $('#budget-range');
+  const setBudget = (v) => {
+    state.budget = Math.max(100, Math.min(2000, v));
+    budget.value = state.budget; brange.value = Math.min(1200, state.budget);
+    renderPlans(); renderBasket();
+  };
+  budget.oninput = () => setBudget(Number(budget.value) || 600);
+  brange.oninput = () => setBudget(Number(brange.value));
+
+  const moneyIn = $('#money'), mrange = $('#money-range');
+  const setMoney = (v) => {
+    state.money = Math.max(0, Math.min(300, v));
+    moneyIn.value = state.money; mrange.value = Math.min(150, state.money || 10);
+    renderPlans(); renderBasket();
+  };
+  moneyIn.oninput = () => setMoney(Number(moneyIn.value) || 0);
+  mrange.oninput = () => setMoney(Number(mrange.value));
+
+  $('#sort').onchange = (e) => { state.sort = e.target.value; state.page = 0; renderPlans(); };
+
+  const fill = $('#fill');
+  fill.oninput = () => {
+    state.fill = Number(fill.value) / 100;
+    $('#fill-val').textContent = fill.value + '%';
+    renderPlans();
+  };
+
+  document.querySelectorAll('#goals .chip').forEach((g) => {
+    g.onclick = () => {
+      document.querySelectorAll('#goals .chip').forEach((x) => x.classList.remove('active'));
+      g.classList.add('active');
+      state.goal = g.dataset.goal;
+      state.page = 0;
+      renderPlans();
+    };
+  });
+
+  document.querySelectorAll('#cats .chip').forEach((c) => {
+    c.onclick = () => {
+      const cat = c.dataset.cat;
+      if (state.exclude.has(cat)) state.exclude.delete(cat); else state.exclude.add(cat);
+      c.classList.toggle('active', !state.exclude.has(cat));
+      state.page = 0;
+      renderPlans();
+    };
+  });
+
+  $('#toggle-avail').onclick = (e) => {
+    state.onlyAvail = !state.onlyAvail;
+    e.target.classList.toggle('active', state.onlyAvail);
+    state.page = 0;
+    renderPlans();
+  };
+
+  $('#refresh').onclick = () => { state.page += 1; renderPlans(); };
+
+  $('#search').oninput = renderPicker;
+  document.querySelectorAll('#picker-cats .chip').forEach((c) => {
+    c.onclick = () => {
+      document.querySelectorAll('#picker-cats .chip').forEach((x) => x.classList.remove('active'));
+      c.classList.add('active');
+      state.pickerCat = c.dataset.cat;
+      renderPicker();
+    };
+  });
+  $('#clear').onclick = () => { state.basket = []; renderBasket(); };
+}
+
+async function boot() {
+  let ndata, cdata;
+  if (window.__MCD_DATA__) {
+    // 单文件自包含模式：数据由 build_web_data.py 内联进页面
+    ndata = window.__MCD_DATA__.nutrition;
+    cdata = window.__MCD_DATA__.combos;
+    state.meta = window.__MCD_DATA__.meta || {};
+  } else {
+    try {
+      const [nres, cres] = await Promise.all([fetch('data/nutrition.json'), fetch('data/combos.json')]);
+      ndata = await nres.json();
+      cdata = await cres.json();
+      state.meta = ndata;
+    } catch (err) {
+      $('#plans').appendChild(el('p', 'hint',
+        '数据加载失败：' + err.message + '。请通过 HTTP 打开本页面，不要直接双击 html 文件。'));
+      return;
+    }
+  }
+  state.items = ndata.items;
+  state.combos = cdata.combos;
+  if (state.meta.price_note) $('#price-note').textContent = '价格说明：' + state.meta.price_note;
+  bind();
+  renderPlans();
+  renderPicker();
+  renderBasket();
+  renderCommunity();
+}
+
+boot();
+
+</script>
 </body>
 </html>

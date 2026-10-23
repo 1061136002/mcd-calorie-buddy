@@ -441,19 +441,27 @@ function bind() {
 }
 
 async function boot() {
-  try {
-    const [nres, cres] = await Promise.all([fetch('data/nutrition.json'), fetch('data/combos.json')]);
-    const ndata = await nres.json();
-    const cdata = await cres.json();
-    state.items = ndata.items;
-    state.combos = cdata.combos;
-    state.meta = ndata;
-    if (ndata.price_note) $('#price-note').textContent = '价格说明：' + ndata.price_note;
-  } catch (err) {
-    $('#plans').appendChild(el('p', 'hint',
-      '数据加载失败：' + err.message + '。请通过 HTTP 打开本页面，不要直接双击 html 文件。'));
-    return;
+  let ndata, cdata;
+  if (window.__MCD_DATA__) {
+    // 单文件自包含模式：数据由 build_web_data.py 内联进页面
+    ndata = window.__MCD_DATA__.nutrition;
+    cdata = window.__MCD_DATA__.combos;
+    state.meta = window.__MCD_DATA__.meta || {};
+  } else {
+    try {
+      const [nres, cres] = await Promise.all([fetch('data/nutrition.json'), fetch('data/combos.json')]);
+      ndata = await nres.json();
+      cdata = await cres.json();
+      state.meta = ndata;
+    } catch (err) {
+      $('#plans').appendChild(el('p', 'hint',
+        '数据加载失败：' + err.message + '。请通过 HTTP 打开本页面，不要直接双击 html 文件。'));
+      return;
+    }
   }
+  state.items = ndata.items;
+  state.combos = cdata.combos;
+  if (state.meta.price_note) $('#price-note').textContent = '价格说明：' + state.meta.price_note;
   bind();
   renderPlans();
   renderPicker();

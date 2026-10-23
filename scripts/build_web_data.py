@@ -33,6 +33,40 @@ def load_menu():
     return data.get("items") or {}, data.get("stores") or [], data.get("note", "")
 
 
+def build_single_file(nutrition_doc, combos_doc):
+    """Render docs/index.html as a single self-contained file.
+
+    Everything except the food photos is inlined: CSS, JS and the two data
+    blobs. GitHub Pages serves from China can drop individual sub-requests,
+    which used to leave the page unstyled; one file has no such failure mode.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(here, "web_template.html"), encoding="utf-8") as fh:
+        template = fh.read()
+    with open(os.path.join(ROOT, "docs", "styles.css"), encoding="utf-8") as fh:
+        css = fh.read()
+    with open(os.path.join(ROOT, "docs", "app.js"), encoding="utf-8") as fh:
+        js = fh.read()
+
+    def safe(obj):
+        # "</" inside a JSON string would terminate the inline <script> block
+        return json.dumps(obj, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+
+    html = (template
+            .replace("{{CSS}}", css)
+            .replace("{{JS}}", js)
+            .replace("{{NUTRITION}}", safe(nutrition_doc))
+            .replace("{{COMBOS}}", safe(combos_doc))
+            .replace("{{META}}", safe({
+                "price_note": nutrition_doc.get("price_note", ""),
+                "price_stores": nutrition_doc.get("price_stores", []),
+                "generated_at": nutrition_doc.get("generated_at"),
+            })))
+    with open(os.path.join(ROOT, "docs", "index.html"), "w", encoding="utf-8") as fh:
+        fh.write(html)
+    print("index.html: 单文件自包含，{} KB".format(os.path.getsize(os.path.join(ROOT, "docs", "index.html")) // 1024))
+
+
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     menu, stores, note = load_menu()
@@ -55,16 +89,17 @@ def main():
             "av": i["name"] in menu,  # 当前门店是否还卖
         })
 
+    nutrition_doc = {
+        "generated_at": "2026-10-23",
+        "source": "McDonald's China MCP list-nutrition-foods",
+        "price_note": note,
+        "price_stores": stores,
+        "count": len(nutrition),
+        "available": sum(1 for i in nutrition if i["av"]),
+        "items": nutrition,
+    }
     with open(os.path.join(OUT_DIR, "nutrition.json"), "w", encoding="utf-8") as fh:
-        json.dump({
-            "generated_at": "2026-10-23",
-            "source": "McDonald's China MCP list-nutrition-foods",
-            "price_note": note,
-            "price_stores": stores,
-            "count": len(nutrition),
-            "available": sum(1 for i in nutrition if i["av"]),
-            "items": nutrition,
-        }, fh, ensure_ascii=False, separators=(",", ":"))
+        json.dump(nutrition_doc, fh, ensure_ascii=False, separators=(",", ":"))
 
     with open(os.path.join(ROOT, "community", "combos.json"), encoding="utf-8-sig") as fh:
         combos = json.load(fh)["combos"]
@@ -75,9 +110,9 @@ def main():
         combo["price"] = round(sum(known), 1) if len(known) == len(prices) else None
         combo["all_available"] = len(known) == len(prices)
 
+    combos_doc = {"count": len(combos), "combos": combos}
     with open(os.path.join(OUT_DIR, "combos.json"), "w", encoding="utf-8") as fh:
-        json.dump({"count": len(combos), "combos": combos}, fh,
-                  ensure_ascii=False, separators=(",", ":"))
+        json.dump(combos_doc, fh, ensure_ascii=False, separators=(",", ":"))
 
     print("nutrition.json: {} 个餐品（在售 {}，有图 {}，有价 {}）".format(
         len(nutrition),
@@ -85,6 +120,7 @@ def main():
         sum(1 for i in nutrition if i["img"]),
         sum(1 for i in nutrition if i["pr"] is not None)))
     print("combos.json: {} 个社区套餐".format(len(combos)))
+    build_single_file(nutrition_doc, combos_doc)
     print("写入 {}".format(OUT_DIR))
 
 

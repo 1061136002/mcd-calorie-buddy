@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>麦麦热量管家 · 麦当劳热量预算配餐</title>
+<meta name="description" content="输入热量预算和价格上限，用麦当劳真实营养与价格数据算出最划算的一餐。支持高蛋白、低钠、低碳、高钙，还能自己搭配分析、浏览社区分享。">
+<!-- 本文件由 scripts/build_web_data.py 生成，勿直接编辑。
+     改样式去 docs/styles.css，改逻辑去 docs/app.js，改结构去 scripts/web_template.html，然后重新 build。 -->
+<style>
+{{CSS}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-row">
+      <div>
+        <div class="logo-mark">M</div>
+        <h1>麦麦热量管家</h1>
+        <p class="hero-sub">给一句热量预算和预算金额，算出最划算的一餐</p>
+      </div>
+      <a class="star-btn" href="https://github.com/1061136002/mcd-calorie-buddy" target="_blank" rel="noopener">
+        GitHub 上给个 Star
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs wrap">
+  <button class="tab active" data-tab="plan">智能配餐</button>
+  <button class="tab" data-tab="analyze">自己搭配</button>
+  <button class="tab" data-tab="community">社区套餐</button>
+</nav>
+
+<main class="wrap">
+
+  <!-- ================= 智能配餐 ================= -->
+  <section id="tab-plan" class="tab-panel active">
+
+    <div class="card controls">
+      <div class="ctrl-grid">
+        <label class="field">
+          <span class="label">热量预算</span>
+          <div class="num-row">
+            <input type="number" id="budget" value="600" min="100" max="2000" step="10">
+            <span class="unit">kcal</span>
+          </div>
+          <input type="range" id="budget-range" min="200" max="1200" value="600" step="10">
+        </label>
+
+        <label class="field">
+          <span class="label">价格上限</span>
+          <div class="num-row">
+            <input type="number" id="money" value="60" min="0" max="300" step="5">
+            <span class="unit">元</span>
+          </div>
+          <input type="range" id="money-range" min="10" max="150" value="60" step="5">
+        </label>
+
+        <label class="field">
+          <span class="label">排序方式</span>
+          <select id="sort">
+            <option value="score">推荐排序</option>
+            <option value="price-asc">价格 从低到高</option>
+            <option value="price-desc">价格 从高到低</option>
+            <option value="protein">蛋白质 从高到低</option>
+            <option value="kcal">热量 从低到高</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="ctrl-row">
+        <span class="label">营养目标</span>
+        <div class="chips" id="goals">
+          <button class="chip active" data-goal="balanced">均衡</button>
+          <button class="chip" data-goal="high_protein">高蛋白</button>
+          <button class="chip" data-goal="low_sodium">控钠</button>
+          <button class="chip" data-goal="low_carb">低碳</button>
+          <button class="chip" data-goal="high_calcium">补钙</button>
+        </div>
+      </div>
+
+      <div class="ctrl-row">
+        <span class="label">包含分类</span>
+        <div class="chips" id="cats">
+          <button class="chip active" data-cat="main">主食</button>
+          <button class="chip active" data-cat="side">小食</button>
+          <button class="chip active" data-cat="drink">饮料</button>
+          <button class="chip" data-cat="dessert">甜品</button>
+        </div>
+      </div>
+
+      <div class="ctrl-row">
+        <span class="label">细节</span>
+        <div class="chips">
+          <button class="chip active" id="toggle-avail">只用在售餐品</button>
+          <button class="chip" id="refresh">换一批</button>
+        </div>
+        <span class="label" id="fill-wrap">最低饱腹度 <b id="fill-val">75%</b>
+          <input type="range" id="fill" min="50" max="100" value="75" step="5"></span>
+      </div>
+
+      <p class="hint" id="plan-hint"></p>
+    </div>
+
+    <div id="plans" class="plans"></div>
+  </section>
+
+  <!-- ================= 自己搭配 ================= -->
+  <section id="tab-analyze" class="tab-panel">
+    <div class="card controls">
+      <div class="ctrl-row">
+        <label class="field grow">
+          <span class="label">搜索餐品，点一下加进我的套餐</span>
+          <input type="text" id="search" placeholder="板烧、薯条、可乐、麦满分…">
+        </label>
+      </div>
+      <div class="ctrl-row">
+        <div class="chips" id="picker-cats">
+          <button class="chip active" data-cat="all">全部</button>
+          <button class="chip" data-cat="main">主食</button>
+          <button class="chip" data-cat="side">小食</button>
+          <button class="chip" data-cat="drink">饮料</button>
+          <button class="chip" data-cat="dessert">甜品</button>
+        </div>
+      </div>
+      <div id="picker" class="picker"></div>
+      <p class="hint" id="picker-hint"></p>
+    </div>
+
+    <div class="card">
+      <div class="row-between">
+        <h2>我的套餐</h2>
+        <button class="ghost" id="clear">清空</button>
+      </div>
+      <div id="basket" class="basket"></div>
+      <div id="totals" class="totals"></div>
+    </div>
+  </section>
+
+  <!-- ================= 社区套餐 ================= -->
+  <section id="tab-community" class="tab-panel">
+    <p class="hint">
+      社区套餐由开源贡献者分享。点「载入我的套餐」可以拿去自己改。
+      想分享你的搭配？<a href="https://github.com/1061136002/mcd-calorie-buddy/blob/main/community/CONTRIBUTING.md" target="_blank" rel="noopener">提个 PR 就行</a>。
+    </p>
+    <div id="community" class="plans"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p id="price-note"></p>
+    <p>营养数据来自麦当劳中国官方 MCP（<code>list-nutrition-foods</code>），餐品图片与价格来自麦当劳官方菜单接口。实际餐品、价格、供应状态以门店为准。</p>
+    <p>钠的成人每日参考摄入量约 2000mg。本工具输出仅供参考，不构成医疗或营养建议。</p>
+  </div>
+</footer>
+
+<script>
+window.__MCD_DATA__ = {
+  nutrition: {{NUTRITION}},
+  combos: {{COMBOS}},
+  meta: {{META}}
+};
+</script>
+<script>
+{{JS}}
+</script>
+</body>
+</html>
